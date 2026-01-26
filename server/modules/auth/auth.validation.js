@@ -18,6 +18,25 @@ export const signupSchema = z.object({
     .regex(/[0-9]/, "Password must contain a number"),
 });
 
+export const forgotPasswordSchema = z.object({
+  email: z.string().email("Invalid email"),
+});
+
+export const resetPasswordSchema = z.object({
+  access_token: z.string(),
+  new_password: z
+    .string()
+    .min(8)
+    .max(64)
+    .regex(/[A-Z]/, "Must contain uppercase")
+    .regex(/[0-9]/, "Must contain number"),
+});
+
+export const changePasswordSchema = z.object({
+  current_password: z.string().min(1),
+  new_password: z.string().min(8).max(64).regex(/[A-Z]/).regex(/[0-9]/),
+});
+
 export const loginSchema = z.object({
   email: z
     .string({ required_error: "Email is required" })

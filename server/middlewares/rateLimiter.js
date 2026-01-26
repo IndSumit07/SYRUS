@@ -7,3 +7,11 @@ export const authLimiter = rateLimit({
   standardHeaders: true,
   legacyHeaders: false,
 });
+
+export const scrapperLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 1 hour
+  max: 10, // 5 requests per hour per IP
+  message: "Too many crawl requests. Please try again later.",
+  standardHeaders: true,
+  legacyHeaders: false,
+});

@@ -5,3 +5,14 @@
 *{
     font-family: "Space Grotesk", sans-serif;
 }
+
+.syrus-gradient {
+    background: linear-gradient(to top right, #fb923c, #ea580c);
+}
+
+.syrus-btn {
+    background-color: #FD6000;
+}
+.syrus-btn:hover {
+    background-color: #ea580c;
+}
