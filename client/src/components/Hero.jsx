@@ -29,18 +29,26 @@ const Hero = () => {
       </div>
 
       {/* Visuals Section */}
-      <div className="relative mt-16 w-full max-w-6xl mx-auto h-[280px] md:h-[500px] flex justify-center">
+      <div className="relative mt-16 w-full max-w-6xl mx-auto flex justify-center">
         {/* Desktop Frame */}
-        <div className="rounded-xl md:rounded-2xl bg-gray-100 p-1.5 md:p-2.5 border border-gray-200 shadow-xl relative z-10 w-[80%] md:w-[90%] max-w-[800px] h-full overflow-hidden">
-          <div className="relative w-full h-full bg-gray-50 rounded-lg md:rounded-xl overflow-hidden flex items-center justify-center border border-dashed border-gray-300">
-            <span className="text-gray-400 font-medium">Dashboard Preview Placeholder</span>
+        <div className="rounded-xl md:rounded-2xl bg-gray-100 p-1.5 md:p-2.5 border border-gray-200 shadow-xl relative z-10 w-[80%] md:w-[90%] max-w-[800px] overflow-hidden">
+          <div className="relative w-full bg-gray-50 rounded-lg md:rounded-xl overflow-hidden">
+            <img
+              src="/desktop-rectangle-image.png"
+              alt="SYRUS Dashboard Preview"
+              className="w-full h-auto object-contain"
+            />
           </div>
         </div>
 
         {/* Mobile Frame */}
-        <div className="absolute top-10 -right-4 md:top-20 md:right-10 z-20 rounded-2xl md:rounded-3xl bg-gray-100 p-1 md:p-1.5 border border-gray-200 shadow-2xl w-[90px] h-[180px] md:w-[220px] md:h-[420px]">
-          <div className="w-full h-full bg-gray-50 rounded-xl md:rounded-2xl overflow-hidden relative flex items-center justify-center border border-dashed border-gray-300">
-            <span className="text-gray-400 text-xs md:text-sm font-medium text-center px-2">Mobile Stats</span>
+        <div className="absolute top-10 -right-4 md:top-20 md:right-10 z-20 rounded-2xl md:rounded-3xl bg-gray-100 p-1 md:p-1.5 border border-gray-200 shadow-2xl w-[90px] md:w-[220px]">
+          <div className="w-full bg-gray-50 rounded-xl md:rounded-2xl overflow-hidden relative">
+            <img
+              src="/mobile-rectangle-image.png"
+              alt="SYRUS Mobile Stats"
+              className="w-full h-auto object-contain"
+            />
           </div>
         </div>
       </div>
