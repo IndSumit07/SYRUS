@@ -129,7 +129,7 @@ const Signin = () => {
                             <div className="mt-6">
                                 <button
                                     type="button"
-                                    onClick={() => window.location.href = `${SERVER_URL}/auth/google`}
+                                    onClick={() => window.location.href = `${SERVER_URL}/api/auth/google`}
                                     className="w-full flex items-center justify-center gap-3 py-3.5 px-4 border border-gray-200 rounded-xl shadow-sm bg-white text-sm font-bold text-gray-700 hover:bg-gray-50 transition-all duration-200 hover:border-gray-300"
                                 >
                                     <svg className="h-5 w-5" viewBox="0 0 24 24">

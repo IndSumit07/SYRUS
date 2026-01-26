@@ -8,6 +8,7 @@ import Signup from "./pages/Signup";
 import DashboardSkeleton from "./components/skeletons/DashboardSkeleton";
 import { useAuth } from "./contexts/AuthContext";
 import DashboardLayout from "./pages/DashboardLayout";
+import Settings from "./pages/Settings";
 
 const MainLayout = () => {
   return (
@@ -28,6 +29,7 @@ const App = () => {
       {user ? (
         <Route element={<DashboardLayout />}>
           <Route path="/" element={<Home />} />
+          <Route path="/settings" element={<Settings />} />
           {/* Add other dashboard routes here later */}
           <Route path="*" element={<Home />} />
         </Route>

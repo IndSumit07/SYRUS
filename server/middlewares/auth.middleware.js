@@ -24,6 +24,7 @@ export const requireAuth = async (req, res, next) => {
       id: data.user.id,
       email: data.user.email,
       role: data.user.role,
+      app_metadata: data.user.app_metadata,
       user_metadata: {
         ...metadata,
         full_name:

@@ -68,12 +68,12 @@ export const resetPasswordWithToken = async (access_token, new_password) => {
 };
 
 export const changePassword = async (userId, new_password) => {
-  const { error } = await supabase.auth.admin.updateUserById(userId, {
+  const { data, error } = await supabase.auth.admin.updateUserById(userId, {
     password: new_password,
   });
 
   if (error) throw error;
-  return true;
+  return data.user;
 };
 
 export const exchangeGoogleCode = async (code) => {

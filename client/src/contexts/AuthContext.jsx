@@ -78,6 +78,19 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const changePassword = async (newPassword) => {
+    try {
+      await api.post("/auth/change-password", { new_password: newPassword });
+      toast.success("Password updated successfully");
+      return true;
+    } catch (error) {
+      console.error(error);
+      const message = error.response?.data?.error || "Failed to update password";
+      toast.error(message);
+      return false;
+    }
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -87,6 +100,7 @@ export const AuthProvider = ({ children }) => {
         logout,
         loading,
         checkAuth,
+        changePassword,
         SERVER_URL,
         CLIENT_URL,
       }}

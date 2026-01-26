@@ -33,8 +33,10 @@ export const resetPasswordSchema = z.object({
 });
 
 export const changePasswordSchema = z.object({
-  current_password: z.string().min(1),
-  new_password: z.string().min(8).max(64).regex(/[A-Z]/).regex(/[0-9]/),
+  new_password: z
+    .string()
+    .min(6, "Password must be at least 6 characters")
+    .max(64, "Password too long"),
 });
 
 export const loginSchema = z.object({

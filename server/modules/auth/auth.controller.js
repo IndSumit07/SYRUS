@@ -14,6 +14,7 @@ import {
   resetPasswordSchema,
   signupSchema,
 } from "./auth.validation.js";
+import supabase from "../../configs/supabase.config.js";
 
 export const signUp = async (req, res) => {
   const parsed = signupSchema.safeParse(req.body);
@@ -121,7 +122,26 @@ export const changePasswordController = async (req, res) => {
   if (!parsed.success) return res.status(400).json(parsed.error.flatten());
 
   try {
-    await changePassword(req.user.id, parsed.data.new_password);
+    const user = await changePassword(req.user.id, parsed.data.new_password);
+
+    // Generate new session after password change
+    const { data: sessionData, error: sessionError } =
+      await supabase.auth.signInWithPassword({
+        email: user.email,
+        password: parsed.data.new_password,
+      });
+
+    if (sessionError) throw sessionError;
+
+    // Set new cookie with fresh session
+    res.cookie("access_token", sessionData.session.access_token, {
+      httpOnly: true,
+      path: "/",
+      maxAge: 60 * 60 * 1000,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+    });
+
     res.json({ message: "Password changed successfully" });
   } catch (err) {
     res.status(400).json({ error: err.message });
