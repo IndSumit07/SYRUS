@@ -43,6 +43,8 @@ export const login = async (req, res) => {
       httpOnly: true,
       path: "/",
       maxAge: 60 * 60 * 1000,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
     });
 
     res.json({ message: "Login successful" });
@@ -63,19 +65,13 @@ export const googleCallback = async (req, res) => {
   if (code) {
     try {
       const session = await exchangeGoogleCode(code);
-      console.log(
-        "Google Callback - Session:",
-        session ? "GOT SESSION" : "NO SESSION",
-      );
-      console.log(
-        "Google Callback - Token length:",
-        session?.access_token?.length,
-      );
 
       res.cookie("access_token", session.access_token, {
         httpOnly: true,
         path: "/",
         maxAge: 60 * 60 * 1000,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
       });
       res.redirect(process.env.CLIENT_URL);
     } catch (error) {
