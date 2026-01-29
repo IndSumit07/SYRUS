@@ -9,7 +9,7 @@ import DashboardSkeleton from "./components/skeletons/DashboardSkeleton";
 import { useAuth } from "./contexts/AuthContext";
 import DashboardLayout from "./pages/DashboardLayout";
 import Settings from "./pages/Settings";
-
+import SEO from "./pages/SEO";
 const MainLayout = () => {
   return (
     <>
@@ -30,6 +30,7 @@ const App = () => {
         <Route element={<DashboardLayout />}>
           <Route path="/" element={<Home />} />
           <Route path="/settings" element={<Settings />} />
+          <Route path="/seo" element={<SEO />} />
           {/* Add other dashboard routes here later */}
           <Route path="*" element={<Home />} />
         </Route>

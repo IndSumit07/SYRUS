@@ -78,6 +78,13 @@ export const changePassword = async (userId, new_password) => {
 
 export const exchangeGoogleCode = async (code) => {
   const { data, error } = await supabase.auth.exchangeCodeForSession(code);
-  if (error) throw error;
+
+  if (error) {
+    throw error;
+  }
+
+  if (!data?.session) {
+    throw new Error("No session returned from Google authentication");
+  }
   return data.session;
 };

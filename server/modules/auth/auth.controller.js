@@ -40,16 +40,26 @@ export const login = async (req, res) => {
   try {
     const session = await loginUser(parsed.data.email, parsed.data.password);
 
-    res.cookie("access_token", session.access_token, {
+    const cookieOptions = {
       httpOnly: true,
       path: "/",
-      maxAge: 60 * 60 * 1000,
+      maxAge: 60 * 60 * 1000, // 1 hour
       secure: process.env.NODE_ENV === "production",
       sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
-    });
+    };
+
+    res.cookie("access_token", session.access_token, cookieOptions);
+
+    if (session.refresh_token) {
+      res.cookie("refresh_token", session.refresh_token, {
+        ...cookieOptions,
+        maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+      });
+    }
 
     res.json({ message: "Login successful" });
-  } catch {
+  } catch (error) {
+    console.error("Login error:", error);
     res.status(401).json({ error: "Invalid credentials" });
   }
 };
@@ -63,30 +73,58 @@ export const googleLogin = async (req, res) => {
 export const googleCallback = async (req, res) => {
   const { code } = req.query;
 
-  if (code) {
-    try {
-      const session = await exchangeGoogleCode(code);
+  if (!code) {
+    console.error("No code provided in Google callback");
+    return res.redirect(`${process.env.CLIENT_URL}/signin?error=NoCode`);
+  }
 
-      res.cookie("access_token", session.access_token, {
-        httpOnly: true,
-        path: "/",
-        maxAge: 60 * 60 * 1000,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
-      });
-      res.redirect(process.env.CLIENT_URL);
-    } catch (error) {
-      console.error("Google login error:", error);
-      res.redirect(`${process.env.CLIENT_URL}/signin?error=LoginFailed`);
+  try {
+    const session = await exchangeGoogleCode(code);
+
+    if (!session || !session.access_token) {
+      throw new Error("No session or access token received from Google");
     }
-  } else {
-    res.redirect(`${process.env.CLIENT_URL}/signin?error=NoCode`);
+
+    const cookieOptions = {
+      httpOnly: true,
+      path: "/",
+      maxAge: 60 * 60 * 1000, // 1 hour
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+    };
+
+    // Set access token cookie
+    res.cookie("access_token", session.access_token, cookieOptions);
+
+    // Set refresh token cookie if available
+    if (session.refresh_token) {
+      res.cookie("refresh_token", session.refresh_token, {
+        ...cookieOptions,
+        maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+      });
+    }
+
+    console.log(
+      "Google OAuth successful, redirecting to:",
+      process.env.CLIENT_URL,
+    );
+    res.redirect(process.env.CLIENT_URL);
+  } catch (error) {
+    console.error("Google login error:", error.message || error);
+    res.redirect(`${process.env.CLIENT_URL}/signin?error=LoginFailed`);
   }
 };
 
 /* LOGOUT */
 export const logout = async (req, res) => {
-  res.clearCookie("access_token", { path: "/" });
+  const cookieOptions = {
+    path: "/",
+    secure: process.env.NODE_ENV === "production",
+    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+  };
+
+  res.clearCookie("access_token", cookieOptions);
+  res.clearCookie("refresh_token", cookieOptions);
   res.json({ message: "Logged out" });
 };
 
@@ -133,14 +171,23 @@ export const changePasswordController = async (req, res) => {
 
     if (sessionError) throw sessionError;
 
-    // Set new cookie with fresh session
-    res.cookie("access_token", sessionData.session.access_token, {
+    const cookieOptions = {
       httpOnly: true,
       path: "/",
       maxAge: 60 * 60 * 1000,
       secure: process.env.NODE_ENV === "production",
       sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
-    });
+    };
+
+    // Set new cookie with fresh session
+    res.cookie("access_token", sessionData.session.access_token, cookieOptions);
+
+    if (sessionData.session.refresh_token) {
+      res.cookie("refresh_token", sessionData.session.refresh_token, {
+        ...cookieOptions,
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+      });
+    }
 
     res.json({ message: "Password changed successfully" });
   } catch (err) {
