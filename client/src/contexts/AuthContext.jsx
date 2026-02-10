@@ -1,11 +1,12 @@
+
 import React, { createContext, useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 
 const AuthContext = createContext();
 
-const SERVER_URL = import.meta.env.VITE_SERVER_URL;
-const CLIENT_URL = import.meta.env.VITE_CLIENT_URL;
+const SERVER_URL = import.meta.env.VITE_SERVER_URL || "http://localhost:5000";
+const CLIENT_URL = import.meta.env.VITE_CLIENT_URL || "http://localhost:5173";
 
 const api = axios.create({
   baseURL: `${SERVER_URL}/api`,
@@ -19,7 +20,7 @@ export const AuthProvider = ({ children }) => {
   const checkAuth = async () => {
     try {
       const { data } = await api.get("/auth/me");
-      setUser(data.user);
+      setUser(data);
     } catch (error) {
       setUser(null);
     } finally {
@@ -33,13 +34,13 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     try {
-      await api.post("/auth/login", { email, password });
+      const { data } = await api.post("/auth/login", { email, password });
+      setUser(data);
       toast.success("Logged in successfully!");
-      await checkAuth();
       return true;
     } catch (error) {
       console.error(error);
-      const message = error.response?.data?.error || "Login failed";
+      const message = error.response?.data?.message || "Login failed";
       toast.error(message);
       return false;
     }
@@ -47,25 +48,29 @@ export const AuthProvider = ({ children }) => {
 
   const signup = async (fullName, email, password) => {
     try {
-      await api.post("/auth/signup", { full_name: fullName, email, password });
-      toast.success("Signup successful! Please log in.");
+      const { data } = await api.post("/auth/register", { name: fullName, email, password });
+      toast.success(data.message || "Signup successful! Please check your email for OTP.");
       return true;
     } catch (error) {
       console.error(error);
-      const message =
-        error.response?.data?.error || error.response?.data || "Signup failed";
-
-      // Handle validation errors object
-      if (typeof message === "object" && message !== null) {
-        // Flatten errors if it's an object of arrays or strings
-        const combinedErrors = Object.values(message).flat().join(", ");
-        toast.error(combinedErrors || "Signup failed");
-      } else {
-        toast.error(String(message));
-      }
+      const message = error.response?.data?.message || "Signup failed";
+      toast.error(message);
       return false;
     }
   };
+
+  const verifyOtp = async (email, otp) => {
+    try {
+      const { data } = await api.post("/auth/verify-otp", { email, otp });
+      toast.success(data.message || "Account verified! Please login.");
+      return true;
+    } catch (error) {
+      console.error(error);
+      const message = error.response?.data?.message || "Verification failed";
+      toast.error(message);
+      return false;
+    }
+  }
 
   const logout = async () => {
     try {
@@ -78,18 +83,27 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const changePassword = async (newPassword) => {
+  const forgotPassword = async (email) => {
     try {
-      await api.post("/auth/change-password", { new_password: newPassword });
-      toast.success("Password updated successfully");
+      const { data } = await api.post("/auth/forgot-password", { email });
+      toast.success(data.message);
       return true;
     } catch (error) {
-      console.error(error);
-      const message = error.response?.data?.error || "Failed to update password";
-      toast.error(message);
+      toast.error(error.response?.data?.message || "Request failed");
       return false;
     }
-  };
+  }
+
+  const resetPassword = async (email, otp, newPassword) => {
+    try {
+      const { data } = await api.post("/auth/reset-password", { email, otp, newPassword });
+      toast.success(data.message);
+      return true;
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Reset failed");
+      return false;
+    }
+  }
 
   return (
     <AuthContext.Provider
@@ -97,12 +111,15 @@ export const AuthProvider = ({ children }) => {
         user,
         login,
         signup,
+        verifyOtp,
         logout,
         loading,
         checkAuth,
-        changePassword,
+        forgotPassword,
+        resetPassword,
         SERVER_URL,
         CLIENT_URL,
+        api // Export api instance for other components
       }}
     >
       {children}

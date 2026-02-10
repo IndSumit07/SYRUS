@@ -30,11 +30,9 @@ const DashboardLayout = () => {
 
   const navItems = [
     { name: "Overview", icon: Home, path: "/" },
-    { name: "SEO", icon: TrendingUp, path: "/seo" },
-    { name: "Data Scraper", icon: Database, path: "/scraper" },
     { name: "My Projects", icon: LayoutGrid, path: "/projects" },
+    { name: "SEO", icon: TrendingUp, path: "/seo" },
     { name: "History", icon: History, path: "/history" },
-    { name: "Reports", icon: FileText, path: "/reports" },
   ];
 
   return (
@@ -110,7 +108,7 @@ const DashboardLayout = () => {
               {isSidebarOpen && (
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-bold text-gray-900 truncate">
-                    {user?.user_metadata?.full_name || "User"}
+                    {user?.name || "User"}
                   </p>
                   <p className="text-xs text-gray-500 truncate">
                     {user?.email}
@@ -167,7 +165,10 @@ const DashboardLayout = () => {
               <Settings size={20} />
             </button>
             <div className="h-8 w-[1px] bg-gray-200 mx-2"></div>
-            <button className="syrus-btn text-white px-5 py-2.5 rounded-xl font-bold text-sm shadow-lg shadow-orange-200 transition-all hover:translate-y-[-1px]">
+            <button
+              onClick={() => navigate("/projects")}
+              className="syrus-btn text-white px-5 py-2.5 rounded-xl font-bold text-sm shadow-lg shadow-orange-200 transition-all hover:translate-y-[-1px]"
+            >
               + New Project
             </button>
           </div>

@@ -1,17 +1,18 @@
 import rateLimit from "express-rate-limit";
 
-export const authLimiter = rateLimit({
+export const scrapperLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 10,
-  message: "Too many requests. Try again later.",
+  message: "Too many crawl requests. Please try again later.",
   standardHeaders: true,
   legacyHeaders: false,
 });
 
-export const scrapperLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 1 hour
-  max: 10, // 5 requests per hour per IP
-  message: "Too many crawl requests. Please try again later.",
+export const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 20, // Limit each IP to 20 requests per windowMs
+  message:
+    "Too many auth requests from this IP, please try again after 15 minutes",
   standardHeaders: true,
   legacyHeaders: false,
 });

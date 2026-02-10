@@ -1,8 +1,7 @@
 import { z } from "zod";
 
 export const crawlSchema = z.object({
-  url: z
-    .string({ required_error: "URL is required" })
-    .url("Invalid URL format"),
+  projectId: z.string({ required_error: "Project ID is required" }),
+  url: z.string().url("Invalid URL format").optional(),
   maxPages: z.number().int().min(1).max(50).optional().default(10),
 });

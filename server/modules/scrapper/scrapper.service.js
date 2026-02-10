@@ -143,12 +143,14 @@ const _scrapePageData = async (page, url) => {
         media: {
           total_images: images.length,
           images_without_alt: imagesWithoutAlt,
+          all_images: images, // Include full list
         },
 
         links: {
           total_links: rawLinks.length,
           internal_links: internalLinksCount,
           external_links: externalLinksCount,
+          all_links: rawLinks, // Include full list
         },
       },
       rawLinks,

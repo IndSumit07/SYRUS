@@ -1,40 +1,31 @@
-import supabase from "../configs/supabase.config.js";
-export const requireAuth = async (req, res, next) => {
+import jwt from "jsonwebtoken";
+import User from "../models/User.model.js";
+
+export const protect = async (req, res, next) => {
+  let token;
+
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.startsWith("Bearer")
+  ) {
+    token = req.headers.authorization.split(" ")[1];
+  } else if (req.cookies.access_token) {
+    token = req.cookies.access_token;
+  }
+
+  if (!token) {
+    return res
+      .status(401)
+      .json({ message: "Not authorized to access this route" });
+  }
+
   try {
-    const token = req.cookies.access_token;
-
-    if (!token) {
-      return res.status(401).json({ message: "Authentication required" });
-    }
-
-    // Verify token with Supabase
-    const { data, error } = await supabase.auth.getUser(token);
-
-    if (error || !data?.user) {
-      return res
-        .status(401)
-        .json({ message: "Invalid or expired token", error: error?.message });
-    }
-
-    const metadata =
-      data.user.user_metadata || data.user.raw_user_meta_data || {};
-
-    // Attach user to request
-    req.user = {
-      id: data.user.id,
-      email: data.user.email,
-      role: data.user.role,
-      app_metadata: data.user.app_metadata,
-      user_metadata: {
-        ...metadata,
-        full_name:
-          metadata.full_name || metadata.name || data.user.email?.split("@")[0],
-        avatar_url: metadata.avatar_url || metadata.picture,
-      },
-    };
-
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    req.user = await User.findById(decoded.id).select("-password");
     next();
   } catch (err) {
-    res.status(401).json({ message: "Unauthorized", error: err.message });
+    return res
+      .status(401)
+      .json({ message: "Not authorized to access this route" });
   }
 };

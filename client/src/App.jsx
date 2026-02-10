@@ -4,12 +4,17 @@ import Home from "./pages/Home";
 import Navbar from "./components/Navbar";
 import Signin from "./pages/Signin";
 import Signup from "./pages/Signup";
+import ForgotPassword from "./pages/ForgotPassword";
 
 import DashboardSkeleton from "./components/skeletons/DashboardSkeleton";
 import { useAuth } from "./contexts/AuthContext";
 import DashboardLayout from "./pages/DashboardLayout";
 import Settings from "./pages/Settings";
 import SEO from "./pages/SEO";
+import Projects from "./pages/Projects";
+import ProjectDetails from "./pages/ProjectDetails";
+import Scraper from "./pages/Scraper";
+import History from "./pages/History";
 const MainLayout = () => {
   return (
     <>
@@ -31,7 +36,10 @@ const App = () => {
           <Route path="/" element={<Home />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/seo" element={<SEO />} />
-          {/* Add other dashboard routes here later */}
+          <Route path="/projects" element={<Projects />} />
+          <Route path="/projects/:id" element={<ProjectDetails />} />
+          <Route path="/scraper" element={<Scraper />} />
+          <Route path="/history" element={<History />} />
           <Route path="*" element={<Home />} />
         </Route>
       ) : (
@@ -41,6 +49,7 @@ const App = () => {
       )}
       <Route path="/signin" element={<Signin />} />
       <Route path="/signup" element={<Signup />} />
+      <Route path="/forgot-password" element={<ForgotPassword />} />
     </Routes>
   );
 };

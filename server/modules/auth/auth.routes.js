@@ -1,30 +1,27 @@
 import express from "express";
 import {
-  signUp,
-  login,
-  logout,
-  googleLogin,
-  googleCallback,
+  registerUser,
+  loginUser,
+  logoutUser,
+  getUserProfile,
+  verifyOtp,
   forgotPassword,
   resetPassword,
-  changePasswordController,
-  getMe,
 } from "./auth.controller.js";
+import { protect } from "../../middlewares/auth.middleware.js";
 import { authLimiter } from "../../middlewares/rateLimiter.js";
-import { requireAuth } from "../../middlewares/auth.middleware.js";
 
-const authRouter = express.Router();
+const router = express.Router();
 
-authRouter.post("/signup", authLimiter, signUp);
-authRouter.post("/login", authLimiter, login);
-authRouter.post("/logout", logout);
-authRouter.get("/me", requireAuth, getMe);
+router.use(authLimiter);
 
-authRouter.get("/google", googleLogin);
-authRouter.get("/google/callback", googleCallback);
+router.post("/register", registerUser);
+router.post("/verify-otp", verifyOtp);
+router.post("/login", loginUser);
+router.post("/forgot-password", forgotPassword);
+router.post("/reset-password", resetPassword);
+router.post("/logout", logoutUser);
+router.get("/profile", protect, getUserProfile);
+router.get("/me", protect, getUserProfile); // Alias for consistency
 
-authRouter.post("/forgot-password", authLimiter, forgotPassword);
-authRouter.post("/reset-password", resetPassword);
-authRouter.post("/change-password", requireAuth, changePasswordController);
-
-export default authRouter;
+export default router;

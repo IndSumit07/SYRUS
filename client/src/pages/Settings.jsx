@@ -17,12 +17,7 @@ const Settings = () => {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState({ type: "", text: "" });
 
-  // Check if user is logged in via Google
-  // Supabase stores provider info in app_metadata.providers (array) or provider (string)
-  console.log("User App Metadata:", user?.app_metadata);
-  const isGoogleUser =
-    user?.app_metadata?.provider === "google" ||
-    user?.app_metadata?.providers?.includes("google");
+  const isGoogleUser = false;
 
   const handlePasswordChange = async (e) => {
     e.preventDefault();
