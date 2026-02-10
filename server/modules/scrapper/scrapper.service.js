@@ -5,13 +5,9 @@ import { URL } from "url";
 const getNormalizedUrl = (link, baseUrl, rootHostname) => {
   try {
     const fullUrl = new URL(link, baseUrl);
-
     if (!["http:", "https:"].includes(fullUrl.protocol)) return null;
-
     fullUrl.hash = "";
-
     if (fullUrl.hostname !== rootHostname) return null;
-
     return fullUrl.href;
   } catch (err) {
     return null;
@@ -23,12 +19,17 @@ const _scrapePageData = async (page, url) => {
     const startTime = Date.now();
 
     const response = await page.goto(url, {
-      waitUntil: "networkidle",
+      waitUntil: "domcontentloaded",
       timeout: 30000,
     });
 
-    const statusCode = response ? response.status() : 0;
+    if (!response) {
+      console.warn(`No response received for ${url}`);
+      return { data: null, rawLinks: [] };
+    }
 
+    console.log(`Scraped ${url} [Status: ${response.status()}]`);
+    const statusCode = response.status();
     const html = await page.content();
     const loadTime = Date.now() - startTime;
 
@@ -116,7 +117,6 @@ const _scrapePageData = async (page, url) => {
         url,
         status_code: statusCode,
         load_time_ms: loadTime,
-
         seo: {
           title,
           title_length: title.length,
@@ -128,29 +128,23 @@ const _scrapePageData = async (page, url) => {
           lang,
           favicon,
         },
-
         social,
-
         schema: jsonLd,
-
         structure: headings,
-
         content: {
           word_count: wordCount,
           text_sample: bodyText.slice(0, 1000),
         },
-
         media: {
           total_images: images.length,
           images_without_alt: imagesWithoutAlt,
-          all_images: images, // Include full list
+          all_images: images,
         },
-
         links: {
           total_links: rawLinks.length,
           internal_links: internalLinksCount,
           external_links: externalLinksCount,
-          all_links: rawLinks, // Include full list
+          all_links: rawLinks,
         },
       },
       rawLinks,
@@ -166,14 +160,29 @@ export const scrapePage = async (url) => {
   try {
     browser = await chromium.launch({
       headless: true,
-      args: ["--no-sandbox", "--disable-setuid-sandbox"],
+      args: [
+        "--no-sandbox",
+        "--disable-setuid-sandbox",
+        "--disable-blink-features=AutomationControlled",
+      ],
     });
-    const page = await browser.newPage();
-    const { data } = await _scrapePageData(page, url);
-    if (!data) throw new Error("No data retrieved");
+
+    const context = await browser.newContext({
+      userAgent:
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+    });
+
+    const page = await context.newPage();
+    const { data, rawLinks } = await _scrapePageData(page, url);
+
+    if (!data) {
+      console.error(`Page data extraction failed for ${url}`);
+      throw new Error("No data retrieved from page");
+    }
     return data;
   } catch (error) {
-    throw new Error(`Scraping failed: ${error.message}`);
+    console.error("Scraping failure:", error);
+    throw error;
   } finally {
     if (browser) await browser.close();
   }
@@ -185,12 +194,21 @@ export const crawlWebsite = async (baseUrl, maxPages = 50) => {
   try {
     browser = await chromium.launch({
       headless: true,
-      args: ["--no-sandbox", "--disable-setuid-sandbox"],
+      args: [
+        "--no-sandbox",
+        "--disable-setuid-sandbox",
+        "--disable-blink-features=AutomationControlled",
+      ],
     });
-    const page = await browser.newPage();
+
+    const context = await browser.newContext({
+      userAgent:
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+    });
+
+    const page = await context.newPage();
 
     const rootHostname = new URL(baseUrl).hostname;
-
     const startUrlNormalized =
       getNormalizedUrl(baseUrl, baseUrl, rootHostname) || baseUrl;
 
@@ -220,11 +238,11 @@ export const crawlWebsite = async (baseUrl, maxPages = 50) => {
         }
       }
     }
+    return results;
   } catch (error) {
-    console.error("Crawl failed:", error);
+    console.error("Crawl process failed:", error);
+    throw error;
   } finally {
     if (browser) await browser.close();
   }
-
-  return results;
 };

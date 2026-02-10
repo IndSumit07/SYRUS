@@ -46,9 +46,12 @@ export const crawl = async (req, res) => {
     }
 
     if (!crawlData || crawlData.length === 0) {
+      console.warn(
+        `Crawl returned no data for project ${projectId} at ${targetUrl}`,
+      );
       return res.status(422).json({
         message:
-          "No pages could be analyzed. The website might be blocking scrapers or is inaccessible.",
+          "No pages could be analyzed. The website might be blocking scrapers, requires a login, or is currently inaccessible.",
       });
     }
 
