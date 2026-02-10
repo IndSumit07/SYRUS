@@ -30,12 +30,34 @@ export const crawl = async (req, res) => {
     const targetUrl = url || project.url;
 
     // Crawl
-    const crawlData = await crawlWebsite(targetUrl, maxPages);
+    let crawlData;
+    try {
+      crawlData = await crawlWebsite(targetUrl, maxPages);
+    } catch (crawlErr) {
+      console.error("Scraper service failed:", crawlErr);
+      return res.status(500).json({
+        error: "Crawler error",
+        message:
+          "The scraping process failed to start. Please ensure the server has Playwright installed.",
+      });
+    }
+
+    if (!crawlData || crawlData.length === 0) {
+      return res.status(422).json({
+        message:
+          "No pages could be analyzed. The website might be blocking scrapers or is inaccessible.",
+      });
+    }
 
     // Analyze
     const seoAnalysis = analyzeSiteSeo(crawlData);
+    if (!seoAnalysis) {
+      return res
+        .status(422)
+        .json({ message: "SEO Analysis failed for the crawled data." });
+    }
 
-    const mergedPages = seoAnalysis.pages.map((analysis) => {
+    const mergedPages = (seoAnalysis.pages || []).map((analysis) => {
       const originalData = crawlData.find((p) => p.url === analysis.url);
       return {
         ...analysis,
@@ -43,18 +65,17 @@ export const crawl = async (req, res) => {
       };
     });
 
-    // Find the main page data (entry point)
     const mainPageData =
-      crawlData.find((p) => p.url === targetUrl) || crawlData[0];
+      crawlData.find((p) => p.url === targetUrl) || crawlData[0] || {};
 
     // Save Report to DB
     const report = await Report.create({
       project: projectId,
       user: req.user._id,
       score: seoAnalysis.overall_score || 0,
-      improvements: seoAnalysis.top_improvements.map((i) => i.issue),
+      improvements: (seoAnalysis.top_improvements || []).map((i) => i.issue),
       technicalDetails: {
-        ...mainPageData, // Spread main page details (seo, content, media, etc.) to root of technicalDetails
+        ...mainPageData,
         crawlData_summary: {
           total_pages: seoAnalysis.total_pages_analyzed,
           score: seoAnalysis.overall_score,
@@ -75,11 +96,13 @@ export const crawl = async (req, res) => {
         projectName: project.name,
         projectUrl: project.url,
       },
-    });
+    }).catch((err) => console.error("Activity logging failed:", err));
 
     // Update project lastScannedAt
     project.lastScannedAt = Date.now();
-    await project.save();
+    await project
+      .save()
+      .catch((err) => console.error("Project update failed:", err));
 
     res.json({
       message: "Crawl and Analysis completed successfully",
@@ -92,7 +115,15 @@ export const crawl = async (req, res) => {
       pages: mergedPages,
     });
   } catch (err) {
-    console.error("Crawl error:", err);
-    res.status(500).json({ error: "Failed to process website" });
+    console.error("Crawl error detailed:", {
+      message: err.message,
+      stack: err.stack,
+      projectId: req.body.projectId,
+      url: req.body.url,
+    });
+    res.status(500).json({
+      error: "Internal Server Error",
+      message: "An unexpected error occurred during the process.",
+    });
   }
 };
