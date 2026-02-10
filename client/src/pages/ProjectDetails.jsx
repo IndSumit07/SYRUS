@@ -196,7 +196,7 @@ const ProjectDetails = () => {
                             <div className="bg-white p-8 rounded-[32px] border border-gray-100 shadow-sm flex flex-col">
                                 <h3 className="text-xl font-bold text-gray-900 mb-6">SEO Performance History</h3>
                                 {chartData.length > 0 ? (
-                                    <div className="flex-1 min-h-[250px]">
+                                    <div className="flex-1 h-[300px]">
                                         <ResponsiveContainer width="100%" height="100%">
                                             <LineChart data={chartData}>
                                                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E5E7EB" />

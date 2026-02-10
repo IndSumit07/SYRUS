@@ -27,7 +27,10 @@ export const crawl = async (req, res) => {
         .json({ message: "Not authorized for this project" });
     }
 
-    const targetUrl = url || project.url;
+    let targetUrl = url || project.url;
+    if (!targetUrl.startsWith("http")) {
+      targetUrl = `https://${targetUrl}`;
+    }
 
     // Crawl
     let crawlData;
