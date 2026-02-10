@@ -162,7 +162,10 @@ const _scrapePageData = async (page, url) => {
 };
 
 export const scrapePage = async (url) => {
-  const browser = await chromium.launch({ headless: true });
+  const browser = await chromium.launch({
+    headless: true,
+    args: ["--no-sandbox", "--disable-setuid-sandbox"],
+  });
   const page = await browser.newPage();
   try {
     const { data } = await _scrapePageData(page, url);
@@ -175,7 +178,10 @@ export const scrapePage = async (url) => {
   }
 };
 export const crawlWebsite = async (baseUrl, maxPages = 50) => {
-  const browser = await chromium.launch({ headless: true });
+  const browser = await chromium.launch({
+    headless: true,
+    args: ["--no-sandbox", "--disable-setuid-sandbox"],
+  });
   // Create a reusable page (or context)
   const page = await browser.newPage();
 
