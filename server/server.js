@@ -24,6 +24,7 @@ app.use(
         process.env.CLIENT_URL,
         "http://localhost:5173",
         "http://localhost:4000",
+        "https://syrus.onrender.com",
       ];
 
       if (allowedOrigins.indexOf(origin) !== -1) {
