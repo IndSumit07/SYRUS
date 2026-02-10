@@ -162,54 +162,51 @@ const _scrapePageData = async (page, url) => {
 };
 
 export const scrapePage = async (url) => {
-  const browser = await chromium.launch({
-    headless: true,
-    args: ["--no-sandbox", "--disable-setuid-sandbox"],
-  });
-  const page = await browser.newPage();
+  let browser;
   try {
+    browser = await chromium.launch({
+      headless: true,
+      args: ["--no-sandbox", "--disable-setuid-sandbox"],
+    });
+    const page = await browser.newPage();
     const { data } = await _scrapePageData(page, url);
     if (!data) throw new Error("No data retrieved");
     return data;
   } catch (error) {
     throw new Error(`Scraping failed: ${error.message}`);
   } finally {
-    await browser.close();
+    if (browser) await browser.close();
   }
 };
 export const crawlWebsite = async (baseUrl, maxPages = 50) => {
-  const browser = await chromium.launch({
-    headless: true,
-    args: ["--no-sandbox", "--disable-setuid-sandbox"],
-  });
-  // Create a reusable page (or context)
-  const page = await browser.newPage();
-
-  const rootHostname = new URL(baseUrl).hostname;
-
-  // Clean the start URL
-  const startUrlNormalized =
-    getNormalizedUrl(baseUrl, baseUrl, rootHostname) || baseUrl;
-
-  const visited = new Set();
-  const queue = [startUrlNormalized];
+  let browser;
   const results = [];
-
   try {
+    browser = await chromium.launch({
+      headless: true,
+      args: ["--no-sandbox", "--disable-setuid-sandbox"],
+    });
+    const page = await browser.newPage();
+
+    const rootHostname = new URL(baseUrl).hostname;
+
+    const startUrlNormalized =
+      getNormalizedUrl(baseUrl, baseUrl, rootHostname) || baseUrl;
+
+    const visited = new Set();
+    const queue = [startUrlNormalized];
+
     while (queue.length > 0 && visited.size < maxPages) {
       const currentUrl = queue.shift();
 
       if (visited.has(currentUrl)) continue;
       visited.add(currentUrl);
 
-      // console.log(`Crawling: ${currentUrl}`); // Optional logging
-
       const { data, rawLinks } = await _scrapePageData(page, currentUrl);
 
       if (data) {
         results.push(data);
 
-        // Process links to find new pages to crawl
         for (const link of rawLinks) {
           const normalized = getNormalizedUrl(link, currentUrl, rootHostname);
           if (
@@ -225,7 +222,7 @@ export const crawlWebsite = async (baseUrl, maxPages = 50) => {
   } catch (error) {
     console.error("Crawl failed:", error);
   } finally {
-    await browser.close();
+    if (browser) await browser.close();
   }
 
   return results;
