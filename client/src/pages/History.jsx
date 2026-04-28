@@ -110,19 +110,21 @@ const History = () => {
                 {dateLabel}
               </h3>
               <div className="bg-white rounded-[24px] border border-gray-100 shadow-sm overflow-hidden divide-y divide-gray-50">
-                {groupedHistory[dateLabel].map((item) => (
-                  <div
-                    key={item.id}
-                    className="p-6 hover:bg-gray-50 transition-colors flex items-start gap-4"
-                  >
-                    <div className="mt-1">
-                      {item.type === "scan_completed" && (
-                        <div
-                          className={`w-10 h-10 rounded-full flex items-center justify-center ${item.details.score >= 80 ? "bg-green-100 text-green-600" : item.details.score >= 50 ? "bg-yellow-100 text-yellow-600" : "bg-red-100 text-red-600"}`}
-                        >
-                          <Search size={18} />
-                        </div>
-                      )}
+                {groupedHistory[dateLabel].map((item) => {
+                  const score = item.details?.score ?? 0;
+                  return (
+                    <div
+                      key={item.id}
+                      className="p-6 hover:bg-gray-50 transition-colors flex items-start gap-4"
+                    >
+                      <div className="mt-1">
+                        {item.type === "scan_completed" && (
+                          <div
+                            className={`w-10 h-10 rounded-full flex items-center justify-center ${score >= 80 ? "bg-green-100 text-green-600" : score >= 50 ? "bg-yellow-100 text-yellow-600" : "bg-red-100 text-red-600"}`}
+                          >
+                            <Search size={18} />
+                          </div>
+                        )}
                       {item.type === "project_created" && (
                         <div className="w-10 h-10 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center">
                           <LinkIcon size={18} />
@@ -180,9 +182,9 @@ const History = () => {
                       {item.type === "scan_completed" && (
                         <div className="mt-3 flex items-center gap-3">
                           <div
-                            className={`px-2 py-1 rounded text-xs font-bold ${item.details?.score >= 80 ? "bg-green-100 text-green-700" : item.details?.score >= 50 ? "bg-yellow-100 text-yellow-700" : "bg-red-100 text-red-700"}`}
+                            className={`px-2 py-1 rounded text-xs font-bold ${score >= 80 ? "bg-green-100 text-green-700" : score >= 50 ? "bg-yellow-100 text-yellow-700" : "bg-red-100 text-red-700"}`}
                           >
-                            Score: {item.details?.score ?? 0}
+                            Score: {score}
                           </div>
                           {item.details?.projectId && (
                             <Link
@@ -196,7 +198,8 @@ const History = () => {
                       )}
                     </div>
                   </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
           ))}

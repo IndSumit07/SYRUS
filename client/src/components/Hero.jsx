@@ -22,9 +22,12 @@ const Hero = () => {
           >
             Get Started
           </Link>
-          <button className="bg-white text-orange border border-orange px-8 py-3 rounded-lg font-bold text-lg hover:bg-orange/10 transition-colors">
+          <a
+            href="#capabilities"
+            className="bg-white text-orange border border-orange px-8 py-3 rounded-lg font-bold text-lg hover:bg-orange/10 transition-colors"
+          >
             Learn More
-          </button>
+          </a>
         </div>
       </div>
 
