@@ -173,7 +173,7 @@ const History = () => {
                           </p>
                         </div>
                         <span className="text-xs text-gray-400 font-medium whitespace-nowrap pt-1">
-                          {format(new Date(item.date), "h:mm a")}
+                          {format(new Date(item.date || Date.now()), "h:mm a")}
                         </span>
                       </div>
 
