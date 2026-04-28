@@ -171,7 +171,10 @@ const Home = () => {
                       key={item}
                       className="flex items-start gap-3 text-gray-700"
                     >
-                      <CheckCircle2 className="text-orange-500 mt-0.5" size={18} />
+                      <CheckCircle2
+                        className="text-orange-500 mt-0.5"
+                        size={18}
+                      />
                       <span className="font-medium">{item}</span>
                     </div>
                   ))}
@@ -225,8 +228,8 @@ const Home = () => {
                     Everything your team needs in one report
                   </h2>
                   <p className="text-gray-600 mt-4">
-                    SYRUS centralizes technical diagnostics, content quality, and
-                    opportunity scoring so decisions happen faster.
+                    SYRUS centralizes technical diagnostics, content quality,
+                    and opportunity scoring so decisions happen faster.
                   </p>
                   <div className="mt-6 grid sm:grid-cols-2 gap-4">
                     {[
@@ -315,8 +318,9 @@ const Home = () => {
                     Launch your next SEO audit today
                   </h2>
                   <p className="text-white/80 mt-3 max-w-2xl">
-                    Build faster decisions with a dashboard designed for real-time
-                    insights, clear priorities, and client-ready exports.
+                    Build faster decisions with a dashboard designed for
+                    real-time insights, clear priorities, and client-ready
+                    exports.
                   </p>
                 </div>
                 <div className="flex flex-wrap gap-3">

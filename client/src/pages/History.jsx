@@ -125,79 +125,82 @@ const History = () => {
                             <Search size={18} />
                           </div>
                         )}
-                      {item.type === "project_created" && (
-                        <div className="w-10 h-10 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center">
-                          <LinkIcon size={18} />
-                        </div>
-                      )}
-                      {item.type === "account_created" && (
-                        <div className="w-10 h-10 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center">
-                          <UserPlus size={18} />
-                        </div>
-                      )}
-                    </div>
-
-                    <div className="flex-1 min-w-0">
-                      <div className="flex justify-between items-start">
-                        <div>
-                          <p className="font-bold text-gray-900">
-                            {item.type === "scan_completed" &&
-                              "SEO Scan Completed"}
-                            {item.type === "project_created" &&
-                              "New Project Created"}
-                            {item.type === "account_created" &&
-                              "Account Created"}
-                          </p>
-                          <p className="text-sm text-gray-500 mt-1">
-                            {item.type === "account_created" ? (
-                              "You joined SYRUS!"
-                            ) : (
-                              <>
-                                For{" "}
-                                <span className="font-medium text-gray-700">
-                                  {item.details?.projectName ||
-                                    "Unknown Project"}
-                                </span>
-                                <span className="mx-2">•</span>
-                                <a
-                                  href={item.details?.projectUrl}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className="text-blue-500 hover:underline truncate inline-block max-w-[200px] align-bottom"
-                                >
-                                  {item.details?.projectUrl?.replace(
-                                    /^https?:\/\//,
-                                    "",
-                                  ) || ""}
-                                </a>
-                              </>
-                            )}
-                          </p>
-                        </div>
-                        <span className="text-xs text-gray-400 font-medium whitespace-nowrap pt-1">
-                          {format(new Date(item.date || Date.now()), "h:mm a")}
-                        </span>
+                        {item.type === "project_created" && (
+                          <div className="w-10 h-10 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center">
+                            <LinkIcon size={18} />
+                          </div>
+                        )}
+                        {item.type === "account_created" && (
+                          <div className="w-10 h-10 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center">
+                            <UserPlus size={18} />
+                          </div>
+                        )}
                       </div>
 
-                      {item.type === "scan_completed" && (
-                        <div className="mt-3 flex items-center gap-3">
-                          <div
-                            className={`px-2 py-1 rounded text-xs font-bold ${score >= 80 ? "bg-green-100 text-green-700" : score >= 50 ? "bg-yellow-100 text-yellow-700" : "bg-red-100 text-red-700"}`}
-                          >
-                            Score: {score}
+                      <div className="flex-1 min-w-0">
+                        <div className="flex justify-between items-start">
+                          <div>
+                            <p className="font-bold text-gray-900">
+                              {item.type === "scan_completed" &&
+                                "SEO Scan Completed"}
+                              {item.type === "project_created" &&
+                                "New Project Created"}
+                              {item.type === "account_created" &&
+                                "Account Created"}
+                            </p>
+                            <p className="text-sm text-gray-500 mt-1">
+                              {item.type === "account_created" ? (
+                                "You joined SYRUS!"
+                              ) : (
+                                <>
+                                  For{" "}
+                                  <span className="font-medium text-gray-700">
+                                    {item.details?.projectName ||
+                                      "Unknown Project"}
+                                  </span>
+                                  <span className="mx-2">•</span>
+                                  <a
+                                    href={item.details?.projectUrl}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="text-blue-500 hover:underline truncate inline-block max-w-[200px] align-bottom"
+                                  >
+                                    {item.details?.projectUrl?.replace(
+                                      /^https?:\/\//,
+                                      "",
+                                    ) || ""}
+                                  </a>
+                                </>
+                              )}
+                            </p>
                           </div>
-                          {item.details?.projectId && (
-                            <Link
-                              to={`/projects/${item.details.projectId}`}
-                              className="text-xs font-bold text-orange-500 hover:text-orange-600 flex items-center gap-1"
-                            >
-                              View Results <ArrowRight size={12} />
-                            </Link>
-                          )}
+                          <span className="text-xs text-gray-400 font-medium whitespace-nowrap pt-1">
+                            {format(
+                              new Date(item.date || Date.now()),
+                              "h:mm a",
+                            )}
+                          </span>
                         </div>
-                      )}
+
+                        {item.type === "scan_completed" && (
+                          <div className="mt-3 flex items-center gap-3">
+                            <div
+                              className={`px-2 py-1 rounded text-xs font-bold ${score >= 80 ? "bg-green-100 text-green-700" : score >= 50 ? "bg-yellow-100 text-yellow-700" : "bg-red-100 text-red-700"}`}
+                            >
+                              Score: {score}
+                            </div>
+                            {item.details?.projectId && (
+                              <Link
+                                to={`/projects/${item.details.projectId}`}
+                                className="text-xs font-bold text-orange-500 hover:text-orange-600 flex items-center gap-1"
+                              >
+                                View Results <ArrowRight size={12} />
+                              </Link>
+                            )}
+                          </div>
+                        )}
+                      </div>
                     </div>
-                  </div>
                   );
                 })}
               </div>
