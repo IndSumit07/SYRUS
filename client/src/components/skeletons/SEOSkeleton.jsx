@@ -13,7 +13,10 @@ const SEOSkeleton = () => {
 
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
         {Array.from({ length: 6 }).map((_, idx) => (
-          <div key={idx} className="bg-white rounded-[24px] border border-gray-100 p-6">
+          <div
+            key={idx}
+            className="bg-white rounded-[24px] border border-gray-100 p-6"
+          >
             <div className="flex justify-between items-start mb-6">
               <div className="space-y-2 flex-1 pr-4">
                 <div className="h-5 w-32 rounded-lg skeleton"></div>

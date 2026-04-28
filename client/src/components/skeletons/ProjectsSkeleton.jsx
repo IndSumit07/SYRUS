@@ -13,7 +13,10 @@ const ProjectsSkeleton = () => {
 
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
         {Array.from({ length: 6 }).map((_, idx) => (
-          <div key={idx} className="bg-white p-6 rounded-3xl border border-gray-100">
+          <div
+            key={idx}
+            className="bg-white p-6 rounded-3xl border border-gray-100"
+          >
             <div className="flex justify-between items-start mb-5">
               <div className="h-12 w-12 rounded-2xl skeleton"></div>
               <div className="h-8 w-8 rounded-lg skeleton"></div>

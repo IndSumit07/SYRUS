@@ -47,7 +47,10 @@ const Navbar = () => {
               </button>
             </div>
           ) : (
-            <Link to="/signin" className="relative p-[2px] rounded-lg group overflow-hidden bg-gray-200 inline-block">
+            <Link
+              to="/signin"
+              className="relative p-[2px] rounded-lg group overflow-hidden bg-gray-200 inline-block"
+            >
               <span className="absolute inset-[-1000%] animate-[spin_3s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,transparent_0%,transparent_75%,#FD6000_100%)]" />
               <span className="relative bg-white text-black px-5 py-2.5 rounded-[7px] font-bold flex items-center gap-2 h-full w-full hover:bg-[#FD6000] hover:text-white transition-colors">
                 <LogIn size={20} />
