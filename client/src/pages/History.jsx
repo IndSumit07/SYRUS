@@ -1,43 +1,53 @@
 import React, { useState, useEffect } from "react";
 import {
-    History as HistoryIcon, Clock, Link as LinkIcon, AlertCircle, CheckCircle,
-    Search, Calendar, ArrowRight, Loader2, UserPlus
+    History as HistoryIcon, Clock, Link as LinkIcon,
+    Search, ArrowRight, UserPlus
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import { format } from "date-fns";
+import HistorySkeleton from "../components/skeletons/HistorySkeleton";
+import ErrorState from "../components/common/ErrorState";
 
 const History = () => {
     const { api } = useAuth();
     const [history, setHistory] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState("");
 
     useEffect(() => {
         fetchHistory();
     }, []);
 
     const fetchHistory = async () => {
+        setLoading(true);
+        setError("");
         try {
             const { data } = await api.get("/history");
             setHistory(data);
         } catch (error) {
             console.error("Failed to fetch history", error);
+            setError(error.response?.data?.message || "Failed to load history.");
         } finally {
             setLoading(false);
         }
     };
 
-    if (loading) {
+    if (loading) return <HistorySkeleton />;
+
+    if (error) {
         return (
-            <div className="flex justify-center items-center h-full min-h-[400px]">
-                <Loader2 className="animate-spin text-orange-500" size={40} />
-            </div>
+            <ErrorState
+                title="History unavailable"
+                message={error}
+                onRetry={fetchHistory}
+            />
         );
     }
 
     // Group history by date (Today, Yesterday, etc.)
     const groupedHistory = history.reduce((groups, item) => {
-        const date = new Date(item.date);
+        const date = new Date(item.date || Date.now());
         const today = new Date();
         const yesterday = new Date(today);
         yesterday.setDate(yesterday.getDate() - 1);
@@ -124,10 +134,10 @@ const History = () => {
                                                             "You joined SYRUS!"
                                                         ) : (
                                                             <>
-                                                                For <span className="font-medium text-gray-700">{item.details.projectName}</span>
+                                                                For <span className="font-medium text-gray-700">{item.details?.projectName || "Unknown Project"}</span>
                                                                 <span className="mx-2">•</span>
-                                                                <a href={item.details.projectUrl} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline truncate inline-block max-w-[200px] align-bottom">
-                                                                    {item.details.projectUrl?.replace(/^https?:\/\//, '')}
+                                                                <a href={item.details?.projectUrl} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline truncate inline-block max-w-[200px] align-bottom">
+                                                                    {item.details?.projectUrl?.replace(/^https?:\/\//, '') || ""}
                                                                 </a>
                                                             </>
                                                         )}
@@ -140,15 +150,17 @@ const History = () => {
 
                                             {item.type === "scan_completed" && (
                                                 <div className="mt-3 flex items-center gap-3">
-                                                    <div className={`px-2 py-1 rounded text-xs font-bold ${item.details.score >= 80 ? 'bg-green-100 text-green-700' : item.details.score >= 50 ? 'bg-yellow-100 text-yellow-700' : 'bg-red-100 text-red-700'}`}>
-                                                        Score: {item.details.score}
+                                                    <div className={`px-2 py-1 rounded text-xs font-bold ${item.details?.score >= 80 ? 'bg-green-100 text-green-700' : item.details?.score >= 50 ? 'bg-yellow-100 text-yellow-700' : 'bg-red-100 text-red-700'}`}>
+                                                        Score: {item.details?.score ?? 0}
                                                     </div>
-                                                    <Link
-                                                        to={`/projects/${item.details.projectId}`}
-                                                        className="text-xs font-bold text-orange-500 hover:text-orange-600 flex items-center gap-1"
-                                                    >
-                                                        View Results <ArrowRight size={12} />
-                                                    </Link>
+                                                    {item.details?.projectId && (
+                                                        <Link
+                                                            to={`/projects/${item.details.projectId}`}
+                                                            className="text-xs font-bold text-orange-500 hover:text-orange-600 flex items-center gap-1"
+                                                        >
+                                                            View Results <ArrowRight size={12} />
+                                                        </Link>
+                                                    )}
                                                 </div>
                                             )}
                                         </div>

@@ -2,34 +2,44 @@ import React, { useState, useEffect } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import { Link } from "react-router-dom";
 import {
-  TrendingUp, Globe, Clock, AlertTriangle, ArrowRight, Loader2, Search
+  TrendingUp, Globe, Clock, AlertTriangle, ArrowRight, Search
 } from "lucide-react";
+import SEOSkeleton from "../components/skeletons/SEOSkeleton";
+import ErrorState from "../components/common/ErrorState";
 
 const SEO = () => {
   const { api } = useAuth();
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     fetchProjects();
   }, []);
 
   const fetchProjects = async () => {
+    setLoading(true);
+    setError("");
     try {
       const { data } = await api.get("/projects");
       setProjects(data);
     } catch (error) {
       console.error("Failed to fetch projects", error);
+      setError(error.response?.data?.message || "Failed to load SEO projects.");
     } finally {
       setLoading(false);
     }
   };
 
-  if (loading) {
+  if (loading) return <SEOSkeleton />;
+
+  if (error) {
     return (
-      <div className="flex justify-center items-center h-full min-h-[400px]">
-        <Loader2 className="animate-spin text-orange-500" size={40} />
-      </div>
+      <ErrorState
+        title="SEO dashboard unavailable"
+        message={error}
+        onRetry={fetchProjects}
+      />
     );
   }
 

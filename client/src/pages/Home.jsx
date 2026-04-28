@@ -1,11 +1,14 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Hero from "../components/Hero";
 import { useAuth } from "../contexts/AuthContext";
 import { ArrowRight, Compass, Briefcase, Plus } from "lucide-react";
 
 const Home = () => {
   const { user } = useAuth();
+  const navigate = useNavigate();
+  const displayName =
+    user?.user_metadata?.full_name || user?.name || user?.email || "User";
 
   if (!user) {
     return (
@@ -33,7 +36,7 @@ const Home = () => {
           </div>
 
           <h1 className="text-4xl lg:text-6xl font-extrabold text-gray-900 mb-2 tracking-tight">
-            Hello, <span className="text-gray-900">{user.name?.split(' ')[0] || "User"}!</span>
+            Hello, <span className="text-gray-900">{displayName.split(" ")[0]}!</span>
           </h1>
           <h2 className="text-4xl lg:text-6xl font-extrabold text-[#FD6000] mb-6 tracking-tight">
             Ready to scale up?
@@ -44,10 +47,16 @@ const Home = () => {
           </p>
 
           <div className="flex flex-wrap gap-4">
-            <button className="bg-[#FD6000] hover:bg-orange-600 text-white px-8 py-4 rounded-2xl font-bold text-base shadow-xl shadow-orange-200 transition-all hover:-translate-y-1 flex items-center gap-2">
+            <button
+              onClick={() => navigate("/projects")}
+              className="bg-[#FD6000] hover:bg-orange-600 text-white px-8 py-4 rounded-2xl font-bold text-base shadow-xl shadow-orange-200 transition-all hover:-translate-y-1 flex items-center gap-2"
+            >
               Go to Workspace <ArrowRight size={20} />
             </button>
-            <button className="bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 px-8 py-4 rounded-2xl font-bold text-base transition-all hover:-translate-y-1 flex items-center gap-2 hover:border-gray-300 hover:shadow-sm">
+            <button
+              onClick={() => navigate("/seo")}
+              className="bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 px-8 py-4 rounded-2xl font-bold text-base transition-all hover:-translate-y-1 flex items-center gap-2 hover:border-gray-300 hover:shadow-sm"
+            >
               Explore Tools <Compass size={20} />
             </button>
           </div>

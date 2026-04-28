@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
-import { Play, Globe, AlertCircle, FileText, CheckCircle, Loader2 } from "lucide-react";
+import { Play, Globe, FileText, CheckCircle, Loader2 } from "lucide-react";
 import { useAuth } from "../contexts/AuthContext";
 import { toast } from "react-hot-toast";
+import ScraperSkeleton from "../components/skeletons/ScraperSkeleton";
+import ErrorState from "../components/common/ErrorState";
 
 const Scraper = () => {
     const { api } = useAuth();
@@ -15,6 +17,7 @@ const Scraper = () => {
     const [loading, setLoading] = useState(true);
     const [crawling, setCrawling] = useState(false);
     const [crawlResult, setCrawlResult] = useState(null);
+    const [error, setError] = useState("");
 
     useEffect(() => {
         fetchProjects();
@@ -30,6 +33,8 @@ const Scraper = () => {
     }, [selectedProjectId, projects]);
 
     const fetchProjects = async () => {
+        setLoading(true);
+        setError("");
         try {
             const { data } = await api.get("/projects");
             setProjects(data);
@@ -39,6 +44,7 @@ const Scraper = () => {
         } catch (error) {
             console.error("Failed to fetch projects", error);
             toast.error("Failed to load projects");
+            setError(error.response?.data?.message || "Failed to load projects.");
         } finally {
             setLoading(false);
         }
@@ -78,7 +84,17 @@ const Scraper = () => {
         }
     };
 
-    if (loading) return <div className="p-10 text-center text-gray-400">Loading workspace...</div>;
+    if (loading) return <ScraperSkeleton />;
+
+    if (error) {
+        return (
+            <ErrorState
+                title="Scraper unavailable"
+                message={error}
+                onRetry={fetchProjects}
+            />
+        );
+    }
 
     return (
         <div className="max-w-4xl mx-auto space-y-8">
@@ -175,7 +191,10 @@ const Scraper = () => {
                         </div>
 
                         <div className="flex flex-wrap gap-4">
-                            <button className="flex items-center gap-2 bg-gray-900 text-white px-6 py-3 rounded-xl font-bold hover:bg-gray-800 transition-colors">
+                            <button
+                                onClick={() => navigate(`/projects/${selectedProjectId}`)}
+                                className="flex items-center gap-2 bg-gray-900 text-white px-6 py-3 rounded-xl font-bold hover:bg-gray-800 transition-colors"
+                            >
                                 <FileText size={18} />
                                 View Full Report
                             </button>

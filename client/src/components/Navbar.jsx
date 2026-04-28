@@ -5,6 +5,8 @@ import { useAuth } from "../contexts/AuthContext";
 
 const Navbar = () => {
   const { user, logout } = useAuth();
+  const displayName =
+    user?.user_metadata?.full_name || user?.name || user?.email || "User";
 
   return (
     <nav className="w-full h-[80px] flex justify-between items-center px-10 shadow-sm border-b border-gray-100">
@@ -31,7 +33,7 @@ const Navbar = () => {
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-2 text-gray-700 font-medium bg-gray-50 px-3 py-1.5 rounded-lg border border-gray-200">
                 <User size={18} className="text-[#FD6000]" />
-                <span>{user.user_metadata?.full_name || user.email}</span>
+                <span>{displayName}</span>
               </div>
               <button
                 onClick={logout}

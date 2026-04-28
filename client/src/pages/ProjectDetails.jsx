@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import {
-    ArrowLeft, Globe, Search, BarChart2, AlertCircle,
-    CheckCircle, Clock, ChevronDown, ChevronUp, Loader2
+    ArrowLeft, Search, BarChart2, AlertCircle,
+    CheckCircle, Clock, ChevronDown, Loader2
 } from "lucide-react";
 import {
     LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer
 } from 'recharts';
 import { useAuth } from "../contexts/AuthContext";
 import { toast } from "react-hot-toast";
+import ProjectDetailsSkeleton from "../components/skeletons/ProjectDetailsSkeleton";
+import ErrorState from "../components/common/ErrorState";
 
 const ProjectDetails = () => {
     const { id } = useParams();
@@ -20,8 +22,14 @@ const ProjectDetails = () => {
     const [loading, setLoading] = useState(true);
     const [activeTab, setActiveTab] = useState("overview");
     const [crawling, setCrawling] = useState(false);
+    const [error, setError] = useState("");
+    const [deleting, setDeleting] = useState(false);
 
-    const fetchProjectData = async () => {
+    const fetchProjectData = async (options = { silent: false }) => {
+        if (!options.silent) {
+            setLoading(true);
+        }
+        setError("");
         try {
             const { data } = await api.get(`/projects/${id}`);
             setProject(data);
@@ -31,9 +39,13 @@ const ProjectDetails = () => {
         } catch (error) {
             console.error("Failed to load project", error);
             toast.error("Failed to load project details");
-            navigate("/projects");
+            setError(error.response?.data?.message || "Failed to load project details.");
+            setProject(null);
+            setReports([]);
         } finally {
-            setLoading(false);
+            if (!options.silent) {
+                setLoading(false);
+            }
         }
     };
 
@@ -50,7 +62,7 @@ const ProjectDetails = () => {
             });
             toast.success("Crawl completed!");
             // Refresh data to show new report
-            await fetchProjectData();
+            await fetchProjectData({ silent: true });
             setActiveTab("seo"); // Switch to SEO tab to show results
         } catch (error) {
             toast.error(error.response?.data?.message || "Crawl failed");
@@ -59,7 +71,36 @@ const ProjectDetails = () => {
         }
     };
 
-    if (loading) return <div className="p-10 text-center text-gray-400">Loading project details...</div>;
+    const handleDeleteProject = async () => {
+        if (!project) return;
+        if (!window.confirm("Are you sure? This will permanently delete the project and all reports.")) {
+            return;
+        }
+        setDeleting(true);
+        try {
+            await api.delete(`/projects/${id}`);
+            toast.success("Project deleted successfully");
+            navigate("/projects");
+        } catch (error) {
+            toast.error(error.response?.data?.message || "Failed to delete project");
+        } finally {
+            setDeleting(false);
+        }
+    };
+
+    if (loading) return <ProjectDetailsSkeleton />;
+
+    if (error) {
+        return (
+            <ErrorState
+                title="Project unavailable"
+                message={error}
+                onRetry={() => fetchProjectData()}
+                secondaryActionLabel="Back to Projects"
+                onSecondaryAction={() => navigate("/projects")}
+            />
+        );
+    }
     if (!project) return null;
 
     const latestReport = reports.length > 0 ? reports[0] : null;
@@ -494,8 +535,12 @@ const ProjectDetails = () => {
                                 />
                             </div>
                             <div className="pt-4">
-                                <button className="text-red-500 font-bold hover:text-red-600 hover:bg-red-50 px-4 py-2 rounded-lg transition-colors">
-                                    Delete Project
+                                <button
+                                    onClick={handleDeleteProject}
+                                    disabled={deleting}
+                                    className="text-red-500 font-bold hover:text-red-600 hover:bg-red-50 px-4 py-2 rounded-lg transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
+                                >
+                                    {deleting ? "Deleting..." : "Delete Project"}
                                 </button>
                             </div>
                         </div>

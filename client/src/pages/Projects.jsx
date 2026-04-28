@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import { Plus, Folder, Trash, Globe, Calendar, Search } from "lucide-react";
 import { useAuth } from "../contexts/AuthContext";
 import { toast } from "react-hot-toast";
+import ProjectsSkeleton from "../components/skeletons/ProjectsSkeleton";
+import ErrorState from "../components/common/ErrorState";
 
 const Projects = () => {
     const { api } = useAuth();
@@ -11,13 +13,17 @@ const Projects = () => {
     const [showModal, setShowModal] = useState(false);
     const [formData, setFormData] = useState({ name: "", url: "" });
     const [creating, setCreating] = useState(false);
+    const [error, setError] = useState("");
 
     const fetchProjects = async () => {
+        setLoading(true);
+        setError("");
         try {
             const { data } = await api.get("/projects");
             setProjects(data);
         } catch (error) {
             console.error("Failed to fetch projects", error);
+            setError(error.response?.data?.message || "Failed to load projects.");
         } finally {
             setLoading(false);
         }
@@ -54,7 +60,17 @@ const Projects = () => {
         }
     }
 
-    if (loading) return <div className="p-10 text-center text-gray-400">Loading projects...</div>;
+    if (loading) return <ProjectsSkeleton />;
+
+    if (error) {
+        return (
+            <ErrorState
+                title="Projects unavailable"
+                message={error}
+                onRetry={fetchProjects}
+            />
+        );
+    }
 
     return (
         <div className="max-w-7xl mx-auto space-y-6">
