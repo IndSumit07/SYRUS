@@ -40,7 +40,7 @@ const DashboardLayout = () => {
 
   return (
     <div className="flex h-screen syrus-bg overflow-hidden font-sans">
-      {/* Sidebar */}
+      
       <aside
         className={`fixed inset-y-0 left-0 z-50 bg-white border-r border-gray-100 transition-all duration-300 ease-in-out lg:relative lg:translate-x-0 ${
           isSidebarOpen
@@ -49,7 +49,7 @@ const DashboardLayout = () => {
         }`}
       >
         <div className="flex flex-col h-full">
-          {/* Logo & Toggle */}
+          
           <div
             className={`h-20 flex items-center border-b border-gray-50 ${isSidebarOpen ? "px-8 justify-between" : "justify-center"}`}
           >
@@ -60,7 +60,7 @@ const DashboardLayout = () => {
                 </span>
               </div>
             )}
-            {/* Desktop Toggle (only visible on desktop) */}
+            
             <button
               onClick={() => setIsSidebarOpen(!isSidebarOpen)}
               className="hidden lg:flex p-1.5 rounded-md text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors"
@@ -69,7 +69,7 @@ const DashboardLayout = () => {
             </button>
           </div>
 
-          {/* Nav Links */}
+          
           <nav className="flex-1 px-4 py-6 space-y-1 overflow-y-auto">
             {isSidebarOpen && (
               <p className="px-4 text-xs font-bold text-gray-400 uppercase tracking-wider mb-4">
@@ -103,7 +103,7 @@ const DashboardLayout = () => {
             })}
           </nav>
 
-          {/* User Profile & Logout */}
+          
           <div className="p-4 border-t border-gray-50 bg-gray-50/50">
             <div
               className={`flex items-center gap-3 mb-4 ${isSidebarOpen ? "px-2" : "justify-center"}`}
@@ -144,9 +144,9 @@ const DashboardLayout = () => {
         </div>
       </aside>
 
-      {/* Main Content */}
+      
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
-        {/* Top Navbar */}
+        
         <header className="h-20 bg-white border-b border-gray-100 flex items-center justify-between px-6 lg:px-10">
           <div className="flex items-center gap-4">
             <button
@@ -180,13 +180,13 @@ const DashboardLayout = () => {
           </div>
         </header>
 
-        {/* content area */}
+        
         <main className="flex-1 overflow-y-auto p-6 lg:p-10">
           <Outlet />
         </main>
       </div>
 
-      {/* Mobile Sidebar Overlay */}
+      
       {isSidebarOpen && (
         <div
           className="fixed inset-0 bg-black/20 z-40 lg:hidden backdrop-blur-sm"

@@ -15,7 +15,7 @@ export const crawl = async (req, res) => {
   try {
     const { projectId, url, maxPages } = parsed.data;
 
-    // Check project ownership
+    
     const project = await Project.findById(projectId);
     if (!project) {
       return res.status(404).json({ message: "Project not found" });
@@ -32,7 +32,7 @@ export const crawl = async (req, res) => {
       targetUrl = `https://${targetUrl}`;
     }
 
-    // Crawl
+    
     let crawlData;
     try {
       crawlData = await crawlWebsite(targetUrl, maxPages);
@@ -55,7 +55,7 @@ export const crawl = async (req, res) => {
       });
     }
 
-    // Analyze
+    
     const seoAnalysis = await analyzeSiteSeo(crawlData);
     if (!seoAnalysis) {
       return res
@@ -78,7 +78,7 @@ export const crawl = async (req, res) => {
       (page) => page.url === mainPageData.url,
     );
 
-    // Save Report to DB
+    
     const report = await Report.create({
       project: projectId,
       user: req.user._id,
@@ -97,7 +97,7 @@ export const crawl = async (req, res) => {
       scannedUrl: targetUrl,
     });
 
-    // Log activity
+    
     await Activity.create({
       user: req.user._id,
       type: "scan_completed",
@@ -110,7 +110,7 @@ export const crawl = async (req, res) => {
       },
     }).catch((err) => console.error("Activity logging failed:", err));
 
-    // Update project lastScannedAt
+    
     project.lastScannedAt = Date.now();
     await project
       .save()

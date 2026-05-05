@@ -1,6 +1,6 @@
 import axios from "axios";
 
-// Send email using Brevo API (v3)
+
 const sendEmail = async ({ email, subject, message, html }) => {
   try {
     const data = {
@@ -19,7 +19,7 @@ const sendEmail = async ({ email, subject, message, html }) => {
 
     const config = {
       headers: {
-        "api-key": process.env.SMTP_PASSWORD, // Using the API Key here
+        "api-key": process.env.SMTP_PASSWORD, 
         "Content-Type": "application/json",
         accept: "application/json",
       },
@@ -38,9 +38,9 @@ const sendEmail = async ({ email, subject, message, html }) => {
       "Error sending email via Brevo API:",
       error.response?.data || error.message,
     );
-    // Don't throw error to prevent 500 on registration, but log it.
-    // However, user needs OTP. So maybe throw but catch in controller and return success with warning?
-    // Let's throw for now so we know it failed.
+    
+    
+    
     throw new Error("Email could not be sent");
   }
 };

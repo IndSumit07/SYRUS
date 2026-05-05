@@ -7,14 +7,14 @@ import {
   generateRefreshToken,
 } from "../../utils/generateToken.js";
 
-// Helper to generate 6-digit OTP
+
 const generateOTP = () => {
   return Math.floor(100000 + Math.random() * 900000).toString();
 };
 
-// @desc    Register a new user
-// @route   POST /api/auth/register
-// @access  Public
+
+
+
 export const registerUser = async (req, res) => {
   try {
     const { name, email, password } = req.body;
@@ -23,9 +23,9 @@ export const registerUser = async (req, res) => {
 
     if (userExists) {
       if (!userExists.isVerified) {
-        // Resend OTP logic could go here, or tell them to check email
-        // For now, let's treat existing unverified user as a valid re-registration attempt or just block
-        // To be clean: If exists and verified -> error. If exists and unverified -> update OTP and resend.
+        
+        
+        
       } else {
         return res.status(400).json({ message: "User already exists" });
       }
@@ -40,22 +40,22 @@ export const registerUser = async (req, res) => {
         password,
       });
 
-      // Log activity
+      
       await Activity.create({
         user: user._id,
         type: "account_created",
         details: {},
       });
     } else {
-      // Update password if they re-register with new password? Or keep old?
-      // Let's assume re-registration updates password for unverified users.
+      
+      
       user.name = name;
-      user.password = password; // Will be hashed by pre-save
+      user.password = password; 
     }
 
     const otp = generateOTP();
     user.otp = otp;
-    user.otpExpires = Date.now() + 10 * 60 * 1000; // 10 minutes
+    user.otpExpires = Date.now() + 10 * 60 * 1000; 
 
     await user.save();
 
@@ -75,7 +75,7 @@ export const registerUser = async (req, res) => {
         email: user.email,
       });
     } catch (error) {
-      // If email fails, user is created but can't verify. Maybe allow resend.
+      
       console.error(error);
       res
         .status(500)
@@ -86,9 +86,9 @@ export const registerUser = async (req, res) => {
   }
 };
 
-// @desc    Verify OTP
-// @route   POST /api/auth/verify-otp
-// @access  Public
+
+
+
 export const verifyOtp = async (req, res) => {
   try {
     const { email, otp } = req.body;
@@ -129,9 +129,9 @@ export const verifyOtp = async (req, res) => {
   }
 };
 
-// @desc    Auth user & get token
-// @route   POST /api/auth/login
-// @access  Public
+
+
+
 export const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -150,16 +150,16 @@ export const loginUser = async (req, res) => {
 
       res.cookie("access_token", accessToken, {
         httpOnly: true,
-        secure: true, // Always true for cross-site cookies
+        secure: true, 
         sameSite: "none",
-        maxAge: 60 * 60 * 1000, // 1 hour
+        maxAge: 60 * 60 * 1000, 
       });
 
       res.cookie("refresh_token", refreshToken, {
         httpOnly: true,
-        secure: true, // Always true for cross-site cookies
+        secure: true, 
         sameSite: "none",
-        maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+        maxAge: 7 * 24 * 60 * 60 * 1000, 
       });
 
       res.json({
@@ -176,9 +176,9 @@ export const loginUser = async (req, res) => {
   }
 };
 
-// @desc    Forgot Password - Send OTP
-// @route   POST /api/auth/forgot-password
-// @access  Public
+
+
+
 export const forgotPassword = async (req, res) => {
   try {
     const { email } = req.body;
@@ -215,9 +215,9 @@ export const forgotPassword = async (req, res) => {
   }
 };
 
-// @desc    Reset Password
-// @route   POST /api/auth/reset-password
-// @access  Public
+
+
+
 export const resetPassword = async (req, res) => {
   try {
     const { email, otp, newPassword } = req.body;
@@ -244,9 +244,9 @@ export const resetPassword = async (req, res) => {
   }
 };
 
-// @desc    Logout user / clear cookie
-// @route   POST /api/auth/logout
-// @access  Private
+
+
+
 export const logoutUser = (req, res) => {
   res.cookie("access_token", "", {
     httpOnly: true,
@@ -259,9 +259,9 @@ export const logoutUser = (req, res) => {
   res.status(200).json({ message: "Logged out successfully" });
 };
 
-// @desc    Get user profile
-// @route   GET /api/auth/profile
-// @access  Private
+
+
+
 export const getUserProfile = async (req, res) => {
   const user = await User.findById(req.user._id);
 

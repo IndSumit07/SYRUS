@@ -75,9 +75,9 @@ const ProjectDetails = () => {
         url: project.url,
       });
       toast.success("Crawl completed!");
-      // Refresh data to show new report
+      
       await fetchProjectData({ silent: true });
-      setActiveTab("seo"); // Switch to SEO tab to show results
+      setActiveTab("seo"); 
     } catch (error) {
       toast.error(error.response?.data?.message || "Crawl failed");
     } finally {
@@ -123,7 +123,7 @@ const ProjectDetails = () => {
 
   const latestReport = reports.length > 0 ? reports[0] : null;
 
-  // Prepare chart data (reverse to show oldest to newest)
+  
   const chartData = [...reports].reverse().map((r) => ({
     date: new Date(r.createdAt).toLocaleDateString(),
     score: r.score,
@@ -131,7 +131,7 @@ const ProjectDetails = () => {
 
   return (
     <div className="max-w-7xl mx-auto space-y-8 pb-10">
-      {/* Header */}
+      
       <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <div className="flex items-center gap-4">
           <button
@@ -167,7 +167,7 @@ const ProjectDetails = () => {
         </div>
       </div>
 
-      {/* Tabs */}
+      
       <div className="border-b border-gray-200">
         <nav className="flex gap-8">
           <button
@@ -203,7 +203,7 @@ const ProjectDetails = () => {
         </nav>
       </div>
 
-      {/* Content */}
+      
       <div className="min-h-[400px]">
         {activeTab === "overview" && (
           <div className="space-y-6">
@@ -278,7 +278,7 @@ const ProjectDetails = () => {
                 )}
               </div>
 
-              {/* SEO History Graph */}
+              
               <div className="bg-white p-8 rounded-[32px] border border-gray-100 shadow-sm flex flex-col">
                 <h3 className="text-xl font-bold text-gray-900 mb-6">
                   SEO Performance History
@@ -349,7 +349,7 @@ const ProjectDetails = () => {
               </div>
             ) : (
               <div className="flex flex-col gap-6">
-                {/* Main Report Card */}
+                
                 <div className="bg-white p-8 rounded-[32px] border border-gray-100 shadow-sm">
                   <div className="flex items-center justify-between mb-8">
                     <h3 className="text-2xl font-bold text-gray-900">
@@ -362,7 +362,7 @@ const ProjectDetails = () => {
                   </div>
 
                   <div className="flex flex-col lg:flex-row gap-10">
-                    {/* Score Circle */}
+                    
                     <div className="flex flex-col items-center justify-center lg:w-1/4 space-y-4">
                       <div
                         className={`relative w-40 h-40 flex items-center justify-center rounded-full border-[8px] ${latestReport.score >= 80 ? "border-green-500 text-green-600" : latestReport.score >= 50 ? "border-yellow-500 text-yellow-600" : "border-red-500 text-red-600"}`}
@@ -387,7 +387,7 @@ const ProjectDetails = () => {
                       </p>
                     </div>
 
-                    {/* Improvements List */}
+                    
                     <div className="flex-1 space-y-6">
                       <h4 className="text-lg font-bold text-gray-900 flex items-center gap-2">
                         <AlertCircle className="text-orange-500" size={20} />
@@ -423,7 +423,7 @@ const ProjectDetails = () => {
                   </div>
                 </div>
 
-                {/* Technical Details / Scrolled Data */}
+                
                 <div className="bg-white p-8 rounded-[32px] border border-gray-100 shadow-sm">
                   <h3 className="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
                     <BarChart2 size={24} className="text-gray-400" />
@@ -433,7 +433,7 @@ const ProjectDetails = () => {
                   <div className="space-y-6">
                     {latestReport.technicalDetails && (
                       <>
-                        {/* Meta Info */}
+                        
                         <div className="border border-gray-100 rounded-2xl overflow-hidden">
                           <div className="bg-gray-50 px-6 py-4 border-b border-gray-100 font-bold text-gray-700">
                             Meta Information
@@ -497,7 +497,7 @@ const ProjectDetails = () => {
                           </div>
                         </div>
 
-                        {/* Content Stats */}
+                        
                         <div className="grid md:grid-cols-2 gap-6">
                           <div className="border border-gray-100 rounded-2xl overflow-hidden">
                             <div className="bg-gray-50 px-6 py-4 border-b border-gray-100 font-bold text-gray-700">
@@ -583,7 +583,7 @@ const ProjectDetails = () => {
                           </div>
                         </div>
 
-                        {/* Headings List */}
+                        
                         <div className="border border-gray-100 rounded-2xl overflow-hidden">
                           <div className="bg-gray-50 px-6 py-4 border-b border-gray-100 font-bold text-gray-700">
                             Headings Structure
@@ -623,7 +623,7 @@ const ProjectDetails = () => {
                           </div>
                         </div>
 
-                        {/* Images Analysis */}
+                        
                         <div className="border border-gray-100 rounded-2xl overflow-hidden">
                           <div className="bg-gray-50 px-6 py-4 border-b border-gray-100 font-bold text-gray-700 flex justify-between items-center">
                             <span>Images Analysis</span>
@@ -671,7 +671,7 @@ const ProjectDetails = () => {
                           </div>
                         </div>
 
-                        {/* Links Analysis */}
+                        
                         <div className="border border-gray-100 rounded-2xl overflow-hidden">
                           <div className="bg-gray-50 px-6 py-4 border-b border-gray-100 font-bold text-gray-700 flex justify-between items-center">
                             <span>Links Found</span>
@@ -708,7 +708,7 @@ const ProjectDetails = () => {
                           </div>
                         </div>
 
-                        {/* Raw Data Toggle */}
+                        
                         <details className="group border border-gray-100 rounded-2xl overflow-hidden">
                           <summary className="bg-gray-50 px-6 py-4 font-bold text-gray-700 cursor-pointer list-none flex items-center justify-between hover:bg-gray-100 transition-colors">
                             View Raw JSON Data

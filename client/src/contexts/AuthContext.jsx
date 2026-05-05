@@ -119,7 +119,7 @@ export const AuthProvider = ({ children }) => {
         resetPassword,
         SERVER_URL,
         CLIENT_URL,
-        api // Export api instance for other components
+        api 
       }}
     >
       {children}

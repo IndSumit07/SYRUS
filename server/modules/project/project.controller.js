@@ -4,9 +4,9 @@ import Report from "../../models/Report.model.js";
 
 import Activity from "../../models/Activity.model.js";
 
-// @desc    Create a new project
-// @route   POST /api/projects
-// @access  Private
+
+
+
 export const createProject = async (req, res) => {
   try {
     const { name, url } = req.body;
@@ -17,7 +17,7 @@ export const createProject = async (req, res) => {
       url,
     });
 
-    // Log activity
+    
     await Activity.create({
       user: req.user._id,
       type: "project_created",
@@ -34,9 +34,9 @@ export const createProject = async (req, res) => {
   }
 };
 
-// @desc    Get all projects for logged in user with latest SEO summary
-// @route   GET /api/projects
-// @access  Private
+
+
+
 export const getProjects = async (req, res) => {
   try {
     const projects = await Project.find({ user: req.user._id }).sort({
@@ -62,9 +62,9 @@ export const getProjects = async (req, res) => {
   }
 };
 
-// @desc    Get single project by ID with reports
-// @route   GET /api/projects/:id
-// @access  Private
+
+
+
 export const getProjectById = async (req, res) => {
   try {
     const project = await Project.findById(req.params.id);
@@ -82,9 +82,9 @@ export const getProjectById = async (req, res) => {
   }
 };
 
-// @desc    Delete a project
-// @route   DELETE /api/projects/:id
-// @access  Private
+
+
+
 export const deleteProject = async (req, res) => {
   try {
     const project = await Project.findById(req.params.id);

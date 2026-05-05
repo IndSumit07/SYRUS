@@ -29,16 +29,16 @@ const Signin = () => {
 
     return (
         <div className="flex h-screen max-h-screen w-full bg-white overflow-hidden">
-            {/* Left Side - Form Section */}
+            
             <div className="w-full lg:w-1/2 flex items-center justify-center p-6 lg:p-12 relative">
-                {/* Snake Card Container */}
+                
                 <div className="relative w-full max-w-[400px] group">
-                    {/* Animated Gradient Border */}
+                    
                     <div className="absolute -inset-[3px] rounded-3xl overflow-hidden opacity-100 transition-opacity duration-300">
                         <span className="absolute inset-[-1000%] animate-[spin_4s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#FFF_0%,#FFF_50%,#FD6000_100%)]" />
                     </div>
 
-                    {/* Form Content */}
+                    
                     <div className="relative bg-white rounded-[20px] p-8 shadow-2xl">
                         <div className="mb-6">
                             <h2 className="text-3xl font-bold text-gray-900 tracking-tight">
@@ -57,7 +57,7 @@ const Signin = () => {
 
                         <form onSubmit={handleSubmit} className="flex flex-col gap-5">
                             <div className="space-y-4">
-                                {/* Email Field */}
+                                
                                 <div className="space-y-1">
                                     <label className="text-sm font-bold text-gray-700 ml-1">
                                         Email address
@@ -74,7 +74,7 @@ const Signin = () => {
                                     </div>
                                 </div>
 
-                                {/* Password Field */}
+                                
                                 <div className="space-y-1">
                                     <div className="flex items-center justify-between ml-1">
                                         <label className="text-sm font-bold text-gray-700">
@@ -144,9 +144,9 @@ const Signin = () => {
                 </div>
             </div>
 
-            {/* Right Side - Info Section */}
+            
             <div className="hidden lg:flex w-1/2 bg-orange relative flex-col justify-center px-16 xl:px-24 overflow-hidden">
-                {/* Background Circles */}
+                
                 <div className="absolute top-0 right-0 transform translate-x-1/3 -translate-y-1/4">
                     <div className="w-[400px] h-[400px] border border-white/20 rounded-full"></div>
                 </div>
@@ -160,7 +160,7 @@ const Signin = () => {
                     </h1>
 
                     <div className="space-y-10">
-                        {/* Feature 1 */}
+                        
                         <div className="flex gap-5 items-start">
                             <div className="flex-shrink-0 w-14 h-14 bg-white/10 backdrop-blur-sm rounded-2xl flex items-center justify-center border border-white/20">
                                 <Database className="w-7 h-7 text-white" />
@@ -176,7 +176,7 @@ const Signin = () => {
                             </div>
                         </div>
 
-                        {/* Feature 2 */}
+                        
                         <div className="flex gap-5 items-start">
                             <div className="flex-shrink-0 w-14 h-14 bg-white/10 backdrop-blur-sm rounded-2xl flex items-center justify-center border border-white/20">
                                 <Bot className="w-7 h-7 text-white" />
@@ -190,7 +190,7 @@ const Signin = () => {
                             </div>
                         </div>
 
-                        {/* Feature 3 */}
+                        
                         <div className="flex gap-5 items-start">
                             <div className="flex-shrink-0 w-14 h-14 bg-white/10 backdrop-blur-sm rounded-2xl flex items-center justify-center border border-white/20">
                                 <BarChart3 className="w-7 h-7 text-white" />

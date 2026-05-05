@@ -30,7 +30,7 @@ const ForgotPassword = () => {
     return (
         <div className="flex h-screen w-full bg-white items-center justify-center p-6">
             <div className="w-full max-w-md bg-white rounded-3xl shadow-xl border border-gray-100 p-8 relative overflow-hidden">
-                {/* Decorative bg */}
+                
                 <div className="absolute top-0 right-0 -mr-20 -mt-20 w-64 h-64 bg-orange-50 rounded-full blur-3xl opacity-50"></div>
 
                 <div className="relative z-10">

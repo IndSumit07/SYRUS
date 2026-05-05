@@ -49,7 +49,7 @@ const Settings = () => {
 
   return (
     <div className="max-w-4xl mx-auto space-y-8 animate-in fade-in duration-500">
-      {/* Header */}
+      
       <div>
         <h1 className="text-3xl font-bold text-gray-900 tracking-tight">
           Settings
@@ -59,7 +59,7 @@ const Settings = () => {
         </p>
       </div>
 
-      {/* Profile Section */}
+      
       <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
         <div className="p-6 border-b border-gray-50 bg-gray-50/50">
           <h2 className="text-lg font-bold text-gray-900 flex items-center gap-2">
@@ -98,7 +98,7 @@ const Settings = () => {
         </div>
       </div>
 
-      {/* Security Section - Conditional Render */}
+      
       <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
         <div className="p-6 border-b border-gray-50 bg-gray-50/50">
           <h2 className="text-lg font-bold text-gray-900 flex items-center gap-2">

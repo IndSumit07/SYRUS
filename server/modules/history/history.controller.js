@@ -1,8 +1,8 @@
 import Activity from "../../models/Activity.model.js";
 
-// @desc    Get user activity history
-// @route   GET /api/history
-// @access  Private
+
+
+
 export const getHistory = async (req, res) => {
   try {
     const userId = req.user._id;

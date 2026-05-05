@@ -30,7 +30,7 @@ const Home = () => {
       <main className="syrus-bg">
         <Hero />
 
-        {/* Brand highlights */}
+        
         <section className="py-10 md:py-14">
           <div className="max-w-6xl mx-auto px-6">
             <div className="grid md:grid-cols-3 gap-6">
@@ -70,7 +70,7 @@ const Home = () => {
           </div>
         </section>
 
-        {/* Capabilities */}
+        
         <section id="capabilities" className="py-14 md:py-20">
           <div className="max-w-6xl mx-auto px-6">
             <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-10">
@@ -146,7 +146,7 @@ const Home = () => {
           </div>
         </section>
 
-        {/* Workflow */}
+        
         <section className="py-14 md:py-20">
           <div className="max-w-6xl mx-auto px-6">
             <div className="grid lg:grid-cols-2 gap-10 items-center">
@@ -215,7 +215,7 @@ const Home = () => {
           </div>
         </section>
 
-        {/* Insight preview */}
+        
         <section className="py-14 md:py-20">
           <div className="max-w-6xl mx-auto px-6">
             <div className="bg-white rounded-[36px] border border-gray-100 shadow-sm overflow-hidden">
@@ -306,7 +306,7 @@ const Home = () => {
           </div>
         </section>
 
-        {/* Final CTA */}
+        
         <section className="py-16 md:py-24">
           <div className="max-w-6xl mx-auto px-6">
             <div className="relative overflow-hidden rounded-[36px] bg-[#FD6000] text-white p-10 md:p-14 shadow-2xl">
@@ -345,11 +345,11 @@ const Home = () => {
     );
   }
 
-  // Dashboard Home View
+  
   return (
     <div className="max-w-7xl mx-auto space-y-8">
-      {/* Welcome Section */}
-      {/* Welcome Section */}
+      
+      
       <div className="bg-white rounded-[32px] p-8 lg:p-12 shadow-sm border border-orange-50 relative overflow-hidden group">
         <div className="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 bg-orange-50/50 rounded-full blur-3xl opacity-50 group-hover:opacity-100 transition-opacity duration-700"></div>
 
@@ -394,10 +394,10 @@ const Home = () => {
         </div>
       </div>
 
-      {/* Quick Actions Grid */}
-      {/* Quick Actions Grid */}
+      
+      
       <div className="grid md:grid-cols-3 gap-6">
-        {/* Card 1 */}
+        
         <Link
           to="/projects"
           className="bg-white p-8 rounded-[32px] border border-gray-100 hover:shadow-xl hover:shadow-gray-200/50 transition-all duration-300 group cursor-pointer relative overflow-hidden"
@@ -418,7 +418,7 @@ const Home = () => {
           </span>
         </Link>
 
-        {/* Card 2 */}
+        
         <Link
           to="/seo"
           className="bg-white p-8 rounded-[32px] border border-gray-100 hover:shadow-xl hover:shadow-gray-200/50 transition-all duration-300 group cursor-pointer relative overflow-hidden"
@@ -439,7 +439,7 @@ const Home = () => {
           </span>
         </Link>
 
-        {/* Card 3 */}
+        
         <Link
           to="/projects"
           className="bg-white p-8 rounded-[32px] border border-gray-100 hover:shadow-xl hover:shadow-gray-200/50 transition-all duration-300 group cursor-pointer relative overflow-hidden"

@@ -91,7 +91,7 @@ const SEO = () => {
               key={project._id}
               className="bg-white rounded-[24px] border border-gray-100 p-6 shadow-sm hover:shadow-md transition-all duration-300 group flex flex-col h-full"
             >
-              {/* Header */}
+              
               <div className="flex justify-between items-start mb-6">
                 <div className="flex-1 min-w-0 pr-4">
                   <h3
@@ -132,7 +132,7 @@ const SEO = () => {
                 )}
               </div>
 
-              {/* Status / Last Scan */}
+              
               <div className="mb-6">
                 {project.latestReport ? (
                   <div className="flex items-center gap-2 text-sm text-gray-500 bg-gray-50 px-3 py-1.5 rounded-lg w-fit">
@@ -151,7 +151,7 @@ const SEO = () => {
                 )}
               </div>
 
-              {/* Issues Summary */}
+              
               <div className="flex-1">
                 {project.latestReport &&
                 project.latestReport.improvements?.length > 0 ? (
@@ -192,7 +192,7 @@ const SEO = () => {
                 )}
               </div>
 
-              {/* Action */}
+              
               <div className="mt-6 pt-6 border-t border-gray-50">
                 <Link
                   to={`/projects/${project._id}`}

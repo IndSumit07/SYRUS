@@ -12,7 +12,7 @@ import historyRoutes from "./modules/history/history.routes.js";
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Trust the first proxy (Render's load balancer) for rate limiting
+
 app.set("trust proxy", 1);
 
 connectDB();

@@ -22,6 +22,6 @@ router.post("/forgot-password", forgotPassword);
 router.post("/reset-password", resetPassword);
 router.post("/logout", logoutUser);
 router.get("/profile", protect, getUserProfile);
-router.get("/me", protect, getUserProfile); // Alias for consistency
+router.get("/me", protect, getUserProfile); 
 
 export default router;

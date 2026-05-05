@@ -18,7 +18,7 @@ const activitySchema = new mongoose.Schema(
       ],
     },
     details: {
-      type: Object, // Flexible field to store related data (e.g., project name, score, IDs)
+      type: Object, 
     },
   },
   {

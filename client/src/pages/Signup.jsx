@@ -41,9 +41,9 @@ const Signup = () => {
 
     return (
         <div className="flex h-screen max-h-screen w-full bg-white overflow-hidden">
-            {/* Left Side - Visual Section (Orange) */}
+            
             <div className="hidden lg:flex w-1/2 bg-orange relative flex-col justify-center items-center px-12 overflow-hidden">
-                {/* Background Patterns */}
+                
                 <div className="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/4 opacity-20">
                     <svg
                         width="400"
@@ -81,9 +81,9 @@ const Signup = () => {
                         Get actionable insights from web data instantly
                     </p>
 
-                    {/* Custom "Something Else" - Live Analytics Card */}
+                    
                     <div className="bg-white/10 backdrop-blur-xl border border-white/20 p-6 rounded-3xl shadow-2xl transform rotate-[-2deg] hover:rotate-0 transition-transform duration-500 mx-auto w-full max-w-sm">
-                        {/* Header */}
+                        
                         <div className="flex justify-between items-center mb-6 pb-4 border-b border-white/10">
                             <div className="flex items-center gap-3">
                                 <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-orange-400 to-orange-600 flex items-center justify-center shadow-lg">
@@ -104,7 +104,7 @@ const Signup = () => {
                             </span>
                         </div>
 
-                        {/* Stats Grid */}
+                        
                         <div className="grid grid-cols-2 gap-4">
                             <div className="bg-white/5 p-3 rounded-2xl border border-white/10 text-left">
                                 <p className="text-orange-200 text-xs mb-1">Active Scrapers</p>
@@ -116,7 +116,7 @@ const Signup = () => {
                             </div>
                         </div>
 
-                        {/* Bottom Info */}
+                        
                         <div className="mt-4 pt-4 border-t border-white/10 flex items-center justify-between">
                             <div className="flex items-center gap-2">
                                 <Globe className="w-4 h-4 text-orange-200" />
@@ -132,16 +132,16 @@ const Signup = () => {
                 </div>
             </div>
 
-            {/* Right Side - Form Section (White) */}
+            
             <div className="w-full lg:w-1/2 flex items-center justify-center py-12 px-8 lg:py-24 lg:px-16 relative">
-                {/* Snake Card Container */}
+                
                 <div className="relative w-full max-w-[400px] group">
-                    {/* Animated Gradient Border */}
+                    
                     <div className="absolute -inset-[3px] rounded-3xl overflow-hidden opacity-100 transition-opacity duration-300">
                         <span className="absolute inset-[-1000%] animate-[spin_4s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#FFF_0%,#FFF_50%,#FD6000_100%)]" />
                     </div>
 
-                    {/* Content */}
+                    
                     <div className="relative bg-white rounded-[20px] p-8 shadow-2xl">
                         <div className="mb-6">
                             <h2 className="text-3xl font-bold text-gray-900 tracking-tight">
@@ -161,7 +161,7 @@ const Signup = () => {
                         <form onSubmit={step === 1 ? handleSubmit : handleVerifyOtp} className="flex flex-col gap-4">
                             {step === 1 ? (
                                 <>
-                                    {/* Full Name */}
+                                    
                                     <div className="space-y-1">
                                         <label className="text-sm font-bold text-gray-700 ml-1">
                                             Full Name
@@ -178,7 +178,7 @@ const Signup = () => {
                                         </div>
                                     </div>
 
-                                    {/* Email */}
+                                    
                                     <div className="space-y-1">
                                         <label className="text-sm font-bold text-gray-700 ml-1">
                                             Email address
@@ -195,7 +195,7 @@ const Signup = () => {
                                         </div>
                                     </div>
 
-                                    {/* Password */}
+                                    
                                     <div className="space-y-1">
                                         <label className="text-sm font-bold text-gray-700 ml-1">
                                             Password
@@ -232,7 +232,7 @@ const Signup = () => {
                                             Please enter the verification code sent to <b>{email}</b>
                                         </p>
                                     </div>
-                                    {/* OTP Field */}
+                                    
                                     <div className="space-y-1">
                                         <label className="text-sm font-bold text-gray-700 ml-1">
                                             Verification Code

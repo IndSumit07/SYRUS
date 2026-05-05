@@ -155,10 +155,7 @@ const analyzePageSeoLlm = async (pageData) => {
   }
 };
 
-/**
- * Analyze a single page's data and return a score + improvements.
- * @param {Object} pageData - The data object returned from the crawler for a single page.
- */
+
 export const analyzePageSeo = async (pageData) => {
   const rules = analyzePageSeoRules(pageData);
   const llmResult = await analyzePageSeoLlm(pageData);
@@ -199,29 +196,29 @@ function analyzePageSeoRules(pageData) {
     technical: 30,
   };
 
-  // --- 1. META CHECKS (30 points) ---
+  
   const { seo } = pageData;
   let metaScore = 0;
   const maxMetaScore = 30;
 
-  // Title
+  
   if (seo.title) {
     if (seo.title_length >= 10 && seo.title_length <= 60) {
       metaScore += 15;
     } else {
-      metaScore += 8; // Present but poor length
+      metaScore += 8; 
       improvements.push("Title length should be between 10 and 60 characters.");
     }
   } else {
     improvements.push("Add a Title tag.");
   }
 
-  // Description
+  
   if (seo.meta_description) {
     if (seo.description_length >= 50 && seo.description_length <= 160) {
       metaScore += 15;
     } else {
-      metaScore += 8; // Present but poor length
+      metaScore += 8; 
       improvements.push(
         "Meta description length should be between 50 and 160 characters.",
       );
@@ -230,10 +227,10 @@ function analyzePageSeoRules(pageData) {
     improvements.push("Add a Meta Description.");
   }
 
-  // Normalize Meta Score to weight
+  
   score += (metaScore / maxMetaScore) * weights.meta;
 
-  // --- 2. STRUCTURE CHECKS (20 points) ---
+  
   const { structure } = pageData;
   let structScore = 0;
   const maxStructScore = 20;
@@ -244,30 +241,30 @@ function analyzePageSeoRules(pageData) {
   } else if (h1Count === 0) {
     improvements.push("Add exactly one H1 tag.");
   } else {
-    structScore += 10; // Multiple H1s is better than none but not ideal
+    structScore += 10; 
     improvements.push("Use only one H1 tag per page.");
   }
 
   score += (structScore / maxStructScore) * weights.structure;
 
-  // --- 3. CONTENT & MEDIA CHECKS (20 points) ---
+  
   const { content, media } = pageData;
   let contentScore = 0;
   const maxContentScore = 20;
 
-  // Word Count
+  
   if (content.word_count > 300) {
     contentScore += 10;
   } else {
     improvements.push("Increase content word count (aim for >300 words).");
   }
 
-  // Image Alt Tags
+  
   const totalImages = media.total_images;
   const missingAlt = media.images_without_alt;
 
   if (totalImages === 0) {
-    contentScore += 10; // No images means no broken alt tags, technically fine but bland.
+    contentScore += 10; 
   } else {
     const altRatio = (totalImages - missingAlt) / totalImages;
     contentScore += 10 * altRatio;
@@ -278,29 +275,29 @@ function analyzePageSeoRules(pageData) {
 
   score += (contentScore / maxContentScore) * weights.content;
 
-  // --- 4. TECHNICAL CHECKS (30 points) ---
+  
   const { status_code, load_time_ms, seo: tSeo, social } = pageData;
   let techScore = 0;
   const maxTechScore = 30;
 
-  // Status Code
+  
   if (status_code === 200) techScore += 10;
   else improvements.push(`Fix page status code (currently ${status_code}).`);
 
-  // Load Time
+  
   if (load_time_ms < 1000) techScore += 5;
   else if (load_time_ms < 2500) techScore += 3;
   else improvements.push("Improve page load speed (aim for <1s).");
 
-  // Canonical
+  
   if (tSeo.canonical) techScore += 5;
   else improvements.push("Add a Canonical link.");
 
-  // Viewport
+  
   if (tSeo.viewport) techScore += 5;
   else improvements.push("Add a Viewport meta tag for mobile responsiveness.");
 
-  // Social (Bonus-ish inside tech)
+  
   if (social.og_title || social.twitter_title) techScore += 5;
   else improvements.push("Add Open Graph or Twitter Card meta tags.");
 
@@ -312,10 +309,7 @@ function analyzePageSeoRules(pageData) {
   };
 }
 
-/**
- * Analyze all crawled pages and provide an overall report.
- * @param {Array} pagesData - Array of crawled page data objects.
- */
+
 export const analyzeSiteSeo = async (pagesData) => {
   if (!pagesData || pagesData.length === 0) return null;
 
@@ -334,7 +328,7 @@ export const analyzeSiteSeo = async (pagesData) => {
   const totalScore = pageResults.reduce((acc, curr) => acc + curr.score, 0);
   const averageScore = Math.round(totalScore / pageResults.length);
 
-  // Aggregate common improvements
+  
   const commonImprovements = {};
   pageResults.forEach((p) => {
     p.improvements.forEach((imp) => {

@@ -23,7 +23,7 @@ const reportSchema = new mongoose.Schema(
       },
     ],
     technicalDetails: {
-      type: Object, // Stores JSON data from scraper
+      type: Object, 
     },
     scannedUrl: {
       type: String,

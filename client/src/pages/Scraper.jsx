@@ -41,7 +41,7 @@ const Scraper = () => {
       const { data } = await api.get("/projects");
       setProjects(data);
       if (!selectedProjectId && data.length > 0) {
-        // Optional: auto-select first project? Or leave empty
+        
       }
     } catch (error) {
       console.error("Failed to fetch projects", error);
@@ -67,9 +67,9 @@ const Scraper = () => {
     setCrawlResult(null);
 
     try {
-      // Note: This endpoint might take a while.
-      // In a real production app, this should be handled asynchronously (background job)
-      // returning a jobId to poll. For now, we await it (might timeout if < 30s limit on Vercel, but okay for local)
+      
+      
+      
       const { data } = await api.post("/scrapper/crawl", {
         projectId: selectedProjectId,
         url: url,
@@ -112,7 +112,7 @@ const Scraper = () => {
       <div className="bg-white rounded-[32px] p-8 shadow-sm border border-orange-50">
         <form onSubmit={handleStartCrawl} className="space-y-6">
           <div className="grid md:grid-cols-2 gap-6">
-            {/* Project Selection */}
+            
             <div className="space-y-2">
               <label className="text-sm font-bold text-gray-700 block">
                 Select Project
@@ -146,7 +146,7 @@ const Scraper = () => {
               )}
             </div>
 
-            {/* Starting URL */}
+            
             <div className="space-y-2">
               <label className="text-sm font-bold text-gray-700 block">
                 Target URL
@@ -190,7 +190,7 @@ const Scraper = () => {
         </form>
       </div>
 
-      {/* Results Area */}
+      
       {crawlResult && (
         <div className="bg-white rounded-[32px] p-8 shadow-sm border border-green-100 relative overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-500">
           <div className="absolute top-0 right-0 w-32 h-32 bg-green-50 rounded-bl-[100px] -mr-4 -mt-4"></div>
@@ -219,7 +219,7 @@ const Scraper = () => {
                   {crawlResult.pagesScanned || 0}
                 </p>
               </div>
-              {/* Add more stats if available in response */}
+              
             </div>
 
             <div className="flex flex-wrap gap-4">

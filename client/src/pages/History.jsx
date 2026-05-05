@@ -49,7 +49,7 @@ const History = () => {
     );
   }
 
-  // Group history by date (Today, Yesterday, etc.)
+  
   const groupedHistory = history.reduce((groups, item) => {
     const date = new Date(item.date || Date.now());
     const today = new Date();

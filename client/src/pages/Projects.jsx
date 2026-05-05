@@ -166,7 +166,7 @@ const Projects = () => {
         </div>
       )}
 
-      {/* Modal */}
+      
       {showModal && (
         <div className="fixed inset-0 bg-black/50 z-[60] flex items-center justify-center p-4 backdrop-blur-sm">
           <div className="bg-white rounded-3xl w-full max-w-md p-8 shadow-2xl relative">
