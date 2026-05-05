@@ -6,6 +6,15 @@
     font-family: "Space Grotesk", sans-serif;
 }
 
+:root {
+    color-scheme: light;
+}
+
+body {
+    background-color: #ffffff;
+    color: #111827;
+}
+
 .syrus-gradient {
     background: linear-gradient(to top right, #fb923c, #ea580c);
 }
@@ -15,4 +24,85 @@
 }
 .syrus-btn:hover {
     background-color: #ea580c;
+}
+
+.syrus-bg {
+    background:
+        radial-gradient(1200px 600px at 10% -20%, rgba(253, 96, 0, 0.12), transparent 60%),
+        radial-gradient(1000px 600px at 100% 0%, rgba(251, 146, 60, 0.12), transparent 60%),
+        #f9fafb;
+}
+
+.skeleton {
+    background: linear-gradient(90deg, #f3f4f6 0%, #f9fafb 50%, #f3f4f6 100%);
+    background-size: 200% 100%;
+    animation: shimmer 1.4s ease-in-out infinite;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: #f3f4f6;
+    border-radius: 999px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #e5e7eb;
+    border-radius: 999px;
+    border: 2px solid #f3f4f6;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #d1d5db;
+}
+
+.display-list-item {
+    display: list-item;
+    list-style-type: disc;
+    list-style-position: inside;
+}
+
+.animate-in {
+    animation-duration: 500ms;
+    animation-fill-mode: both;
+}
+
+.fade-in {
+    animation-name: fade-in;
+}
+
+.slide-in-from-bottom-4 {
+    animation-name: slide-in-from-bottom-4;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: 200% 0;
+    }
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+@keyframes fade-in {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slide-in-from-bottom-4 {
+    from {
+        transform: translateY(16px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
 }

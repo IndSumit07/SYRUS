@@ -23,6 +23,9 @@ const DashboardLayout = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
+  const displayName =
+    user?.user_metadata?.full_name || user?.name || user?.email || "User";
+
   const handleLogout = async () => {
     await logout();
     navigate("/");
@@ -36,13 +39,14 @@ const DashboardLayout = () => {
   ];
 
   return (
-    <div className="flex h-screen bg-gray-50 overflow-hidden font-sans">
+    <div className="flex h-screen syrus-bg overflow-hidden font-sans">
       {/* Sidebar */}
       <aside
-        className={`fixed inset-y-0 left-0 z-50 bg-white border-r border-gray-100 transition-all duration-300 ease-in-out lg:relative lg:translate-x-0 ${isSidebarOpen
-          ? "w-64 translate-x-0"
-          : "w-64 -translate-x-full lg:w-20"
-          }`}
+        className={`fixed inset-y-0 left-0 z-50 bg-white border-r border-gray-100 transition-all duration-300 ease-in-out lg:relative lg:translate-x-0 ${
+          isSidebarOpen
+            ? "w-64 translate-x-0"
+            : "w-64 -translate-x-full lg:w-20"
+        }`}
       >
         <div className="flex flex-col h-full">
           {/* Logo & Toggle */}
@@ -79,17 +83,19 @@ const DashboardLayout = () => {
                   key={item.path}
                   to={item.path}
                   title={!isSidebarOpen ? item.name : ""}
-                  className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group ${isActive
-                    ? "bg-orange-50 text-orange-600 font-bold shadow-sm"
-                    : "text-gray-500 hover:bg-gray-50 hover:text-gray-900 font-medium"
-                    } ${!isSidebarOpen ? "justify-center px-2" : ""}`}
+                  className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group ${
+                    isActive
+                      ? "bg-orange-50 text-orange-600 font-bold shadow-sm"
+                      : "text-gray-500 hover:bg-gray-50 hover:text-gray-900 font-medium"
+                  } ${!isSidebarOpen ? "justify-center px-2" : ""}`}
                 >
                   <item.icon
                     size={20}
-                    className={`flex-shrink-0 transition-colors ${isActive
-                      ? "text-orange-500"
-                      : "text-gray-400 group-hover:text-gray-600"
-                      }`}
+                    className={`flex-shrink-0 transition-colors ${
+                      isActive
+                        ? "text-orange-500"
+                        : "text-gray-400 group-hover:text-gray-600"
+                    }`}
                   />
                   {isSidebarOpen && <span>{item.name || "User"}</span>}
                 </Link>
@@ -108,10 +114,10 @@ const DashboardLayout = () => {
               {isSidebarOpen && (
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-bold text-gray-900 truncate">
-                    {user?.name || "User"}
+                    {displayName}
                   </p>
                   <p className="text-xs text-gray-500 truncate">
-                    {user?.email}
+                    {user?.email || ""}
                   </p>
                 </div>
               )}

@@ -2,34 +2,49 @@ import React, { useState, useEffect } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import { Link } from "react-router-dom";
 import {
-  TrendingUp, Globe, Clock, AlertTriangle, ArrowRight, Loader2, Search
+  TrendingUp,
+  Globe,
+  Clock,
+  AlertTriangle,
+  ArrowRight,
+  Search,
 } from "lucide-react";
+import SEOSkeleton from "../components/skeletons/SEOSkeleton";
+import ErrorState from "../components/common/ErrorState";
 
 const SEO = () => {
   const { api } = useAuth();
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     fetchProjects();
   }, []);
 
   const fetchProjects = async () => {
+    setLoading(true);
+    setError("");
     try {
       const { data } = await api.get("/projects");
       setProjects(data);
     } catch (error) {
       console.error("Failed to fetch projects", error);
+      setError(error.response?.data?.message || "Failed to load SEO projects.");
     } finally {
       setLoading(false);
     }
   };
 
-  if (loading) {
+  if (loading) return <SEOSkeleton />;
+
+  if (error) {
     return (
-      <div className="flex justify-center items-center h-full min-h-[400px]">
-        <Loader2 className="animate-spin text-orange-500" size={40} />
-      </div>
+      <ErrorState
+        title="SEO dashboard unavailable"
+        message={error}
+        onRetry={fetchProjects}
+      />
     );
   }
 
@@ -38,7 +53,9 @@ const SEO = () => {
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
           <h1 className="text-3xl font-bold text-gray-900">SEO Dashboard</h1>
-          <p className="text-gray-500 mt-1">Track and optimize your projects' search performance</p>
+          <p className="text-gray-500 mt-1">
+            Track and optimize your projects' search performance
+          </p>
         </div>
         <Link
           to="/projects"
@@ -53,9 +70,12 @@ const SEO = () => {
           <div className="w-20 h-20 bg-orange-50 rounded-full flex items-center justify-center mx-auto mb-6 text-orange-400">
             <TrendingUp size={40} />
           </div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">No Projects Found</h2>
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">
+            No Projects Found
+          </h2>
           <p className="text-gray-500 mb-8 max-w-md mx-auto">
-            Get started by creating a project and running your first SEO analysis to see insights here.
+            Get started by creating a project and running your first SEO
+            analysis to see insights here.
           </p>
           <Link
             to="/projects"
@@ -74,7 +94,10 @@ const SEO = () => {
               {/* Header */}
               <div className="flex justify-between items-start mb-6">
                 <div className="flex-1 min-w-0 pr-4">
-                  <h3 className="text-lg font-bold text-gray-900 truncate" title={project.name}>
+                  <h3
+                    className="text-lg font-bold text-gray-900 truncate"
+                    title={project.name}
+                  >
                     {project.name}
                   </h3>
                   <a
@@ -84,15 +107,22 @@ const SEO = () => {
                     className="flex items-center gap-1.5 text-gray-400 hover:text-orange-500 text-sm mt-1 transition-colors truncate"
                   >
                     <Globe size={14} />
-                    <span className="truncate">{project.url.replace(/^https?:\/\//, '')}</span>
+                    <span className="truncate">
+                      {project.url.replace(/^https?:\/\//, "")}
+                    </span>
                   </a>
                 </div>
 
                 {project.latestReport ? (
-                  <div className={`w-12 h-12 rounded-full flex items-center justify-center font-bold text-sm border-4 flex-shrink-0 ${project.latestReport.score >= 80 ? 'border-green-50 text-green-600 bg-white' :
-                      project.latestReport.score >= 50 ? 'border-yellow-50 text-yellow-600 bg-white' :
-                        'border-red-50 text-red-600 bg-white'
-                    }`}>
+                  <div
+                    className={`w-12 h-12 rounded-full flex items-center justify-center font-bold text-sm border-4 flex-shrink-0 ${
+                      project.latestReport.score >= 80
+                        ? "border-green-50 text-green-600 bg-white"
+                        : project.latestReport.score >= 50
+                          ? "border-yellow-50 text-yellow-600 bg-white"
+                          : "border-red-50 text-red-600 bg-white"
+                    }`}
+                  >
                     {project.latestReport.score}
                   </div>
                 ) : (
@@ -107,27 +137,46 @@ const SEO = () => {
                 {project.latestReport ? (
                   <div className="flex items-center gap-2 text-sm text-gray-500 bg-gray-50 px-3 py-1.5 rounded-lg w-fit">
                     <Clock size={14} />
-                    <span>Scanned {new Date(project.latestReport.createdAt).toLocaleDateString()}</span>
+                    <span>
+                      Scanned{" "}
+                      {new Date(
+                        project.latestReport.createdAt,
+                      ).toLocaleDateString()}
+                    </span>
                   </div>
                 ) : (
-                  <span className="text-sm text-gray-400 italic">No analysis data yet</span>
+                  <span className="text-sm text-gray-400 italic">
+                    No analysis data yet
+                  </span>
                 )}
               </div>
 
               {/* Issues Summary */}
               <div className="flex-1">
-                {project.latestReport && project.latestReport.improvements?.length > 0 ? (
+                {project.latestReport &&
+                project.latestReport.improvements?.length > 0 ? (
                   <div className="space-y-3">
-                    <p className="text-xs font-bold text-gray-400 uppercase tracking-wide">Top Issues</p>
-                    {project.latestReport.improvements.slice(0, 2).map((issue, idx) => (
-                      <div key={idx} className="flex items-start gap-2 text-sm text-gray-600">
-                        <AlertTriangle size={14} className="text-orange-400 mt-0.5 flex-shrink-0" />
-                        <span className="line-clamp-2">{issue}</span>
-                      </div>
-                    ))}
+                    <p className="text-xs font-bold text-gray-400 uppercase tracking-wide">
+                      Top Issues
+                    </p>
+                    {project.latestReport.improvements
+                      .slice(0, 2)
+                      .map((issue, idx) => (
+                        <div
+                          key={idx}
+                          className="flex items-start gap-2 text-sm text-gray-600"
+                        >
+                          <AlertTriangle
+                            size={14}
+                            className="text-orange-400 mt-0.5 flex-shrink-0"
+                          />
+                          <span className="line-clamp-2">{issue}</span>
+                        </div>
+                      ))}
                     {project.latestReport.improvements.length > 2 && (
                       <p className="text-xs text-gray-400 font-medium pl-6">
-                        +{project.latestReport.improvements.length - 2} more issues
+                        +{project.latestReport.improvements.length - 2} more
+                        issues
                       </p>
                     )}
                   </div>
@@ -137,7 +186,8 @@ const SEO = () => {
                   </div>
                 ) : (
                   <div className="text-sm text-gray-400">
-                    Run an analysis to see SEO insights and improvement recommendations.
+                    Run an analysis to see SEO insights and improvement
+                    recommendations.
                   </div>
                 )}
               </div>
@@ -148,7 +198,8 @@ const SEO = () => {
                   to={`/projects/${project._id}`}
                   className="w-full flex items-center justify-center gap-2 text-[#FD6000] font-bold bg-orange-50 hover:bg-orange-100 py-3 rounded-xl transition-colors"
                 >
-                  {project.latestReport ? 'View Full Report' : 'Start Analysis'} <ArrowRight size={18} />
+                  {project.latestReport ? "View Full Report" : "Start Analysis"}{" "}
+                  <ArrowRight size={18} />
                 </Link>
               </div>
             </div>

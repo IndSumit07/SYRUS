@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 const Hero = () => {
   return (
     <div className="flex flex-col w-full items-center pt-16 pb-20 px-4 md:px-10">
-
       {/* Hero Content - Matching Reference Image Style */}
       <div className="flex flex-col gap-6 justify-center items-center text-center max-w-4xl mx-auto">
         <h1 className="text-5xl md:text-7xl font-bold text-gray-900 leading-[1.1] tracking-tight">
@@ -12,7 +11,8 @@ const Hero = () => {
         </h1>
 
         <p className="text-xl md:text-2xl font-medium text-gray-500 max-w-3xl">
-          <span className="text-orange font-bold">SYRUS</span> turns scraped web data into actionable insights using AI & Power BI.
+          <span className="text-orange font-bold">SYRUS</span> turns scraped web
+          data into actionable insights using AI & Power BI.
         </p>
 
         <div className="mt-6 flex flex-row gap-4">
@@ -22,9 +22,12 @@ const Hero = () => {
           >
             Get Started
           </Link>
-          <button className="bg-white text-orange border border-orange px-8 py-3 rounded-lg font-bold text-lg hover:bg-orange/10 transition-colors">
+          <a
+            href="#capabilities"
+            className="bg-white text-orange border border-orange px-8 py-3 rounded-lg font-bold text-lg hover:bg-orange/10 transition-colors"
+          >
             Learn More
-          </button>
+          </a>
         </div>
       </div>
 
@@ -52,7 +55,6 @@ const Hero = () => {
           </div>
         </div>
       </div>
-
     </div>
   );
 };
