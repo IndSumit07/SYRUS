@@ -56,7 +56,7 @@ export const crawl = async (req, res) => {
     }
 
     // Analyze
-    const seoAnalysis = analyzeSiteSeo(crawlData);
+    const seoAnalysis = await analyzeSiteSeo(crawlData);
     if (!seoAnalysis) {
       return res
         .status(422)
@@ -74,6 +74,10 @@ export const crawl = async (req, res) => {
     const mainPageData =
       crawlData.find((p) => p.url === targetUrl) || crawlData[0] || {};
 
+    const mainPageAnalysis = (mergedPages || []).find(
+      (page) => page.url === mainPageData.url,
+    );
+
     // Save Report to DB
     const report = await Report.create({
       project: projectId,
@@ -82,6 +86,8 @@ export const crawl = async (req, res) => {
       improvements: (seoAnalysis.top_improvements || []).map((i) => i.issue),
       technicalDetails: {
         ...mainPageData,
+        ai_summary: mainPageAnalysis?.ai || null,
+        score_source: mainPageAnalysis?.score_source || "rules",
         crawlData_summary: {
           total_pages: seoAnalysis.total_pages_analyzed,
           score: seoAnalysis.overall_score,
