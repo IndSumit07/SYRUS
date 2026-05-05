@@ -35,12 +35,10 @@ const _scrapePageData = async (page, url) => {
 
     const $ = cheerio.load(html);
 
-    
     const title = $("title").text().trim();
     const metaDescription = $('meta[name="description"]').attr("content") || "";
     const canonical = $('link[rel="canonical"]').attr("href") || "";
 
-    
     const headings = {
       h1: $("h1")
         .map((i, el) => $(el).text().trim())
@@ -53,11 +51,9 @@ const _scrapePageData = async (page, url) => {
         .get(),
     };
 
-    
     const bodyText = $("body").text().replace(/\s+/g, " ").trim();
     const wordCount = bodyText.split(" ").length;
 
-    
     const images = $("img")
       .map((i, el) => ({
         src: $(el).attr("src"),
@@ -67,7 +63,6 @@ const _scrapePageData = async (page, url) => {
 
     const imagesWithoutAlt = images.filter((img) => !img.alt).length;
 
-    
     const rawLinks = $("a[href]")
       .map((i, el) => $(el).attr("href"))
       .get();
@@ -80,14 +75,12 @@ const _scrapePageData = async (page, url) => {
       (l) => l.startsWith("http") && !l.includes(new URL(url).hostname),
     ).length;
 
-    
     const robots = $('meta[name="robots"]').attr("content") || "index, follow";
     const viewport = $('meta[name="viewport"]').attr("content") || null;
     const lang = $("html").attr("lang") || null;
     const favicon =
       $('link[rel="icon"], link[rel="shortcut icon"]').attr("href") || null;
 
-    
     const social = {
       og_title: $('meta[property="og:title"]').attr("content") || null,
       og_description:
@@ -101,15 +94,12 @@ const _scrapePageData = async (page, url) => {
       twitter_image: $('meta[name="twitter:image"]').attr("content") || null,
     };
 
-    
     const jsonLd = [];
     $('script[type="application/ld+json"]').each((i, el) => {
       try {
         const data = JSON.parse($(el).html());
         jsonLd.push(data);
-      } catch (e) {
-        
-      }
+      } catch (e) {}
     });
 
     return {
